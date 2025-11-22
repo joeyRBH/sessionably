@@ -132,7 +132,7 @@ export default async function handler(req, res) {
     );
 
     // Send verification email
-    const verificationLink = `${process.env.APP_URL || 'https://clinicalcanvas.com'}/client-portal.html?verify=${verificationToken}`;
+    const verificationLink = `${process.env.APP_URL || 'https://sessionably.com'}/client-portal.html?verify=${verificationToken}`;
 
     try {
       await sendEmail({

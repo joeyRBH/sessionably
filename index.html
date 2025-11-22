@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sessionably - HIPAA-Compliant Mental Health Practice Management</title>
     <meta name="description" content="Stop drowning in paperwork. HIPAA-compliant EHR built by a clinician who gets it. AI notes that sound like you wrote them. Reclaim your evenings.">
-    <meta name="theme-color" content="#4361EE">
+    <meta name="theme-color" content="#00B4A6">
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" type="image/svg+xml" href="/icon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,33 +15,33 @@
     <style>
         
         :root {
-            /* SimplePractice-inspired Color Palette */
-            --primary-color: #4361EE;
-            --primary-hover: #3651DD;
-            --primary-light: #5B7BFF;
-            --primary-subtle: #EEF2FF;
-            --secondary-color: #6C757D;
-            --accent-color: #0EA5E9;
+            /* Sessionably Brand Color Palette */
+            --primary-color: #00B4A6;
+            --primary-hover: #009688;
+            --primary-light: #26C6BA;
+            --primary-subtle: #E0F7F5;
+            --secondary-color: #888888;
+            --accent-color: #F4A443;
             --success-color: #10B981;
             --warning-color: #F59E0B;
             --danger-color: #EF4444;
 
             /* Backgrounds */
-            --background-gradient: linear-gradient(135deg, #FAFBFC 0%, #F5F6F8 100%);
+            --background-gradient: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
             --surface-color: #FFFFFF;
             --surface-elevated: #FFFFFF;
             --surface-hover: #F8F9FA;
 
             /* Text Colors */
-            --text-primary: #1A1D1F;
-            --text-secondary: #6C757D;
+            --text-primary: #1A1A2E;
+            --text-secondary: #888888;
             --text-tertiary: #9EA4AA;
             --text-muted: #CBD5E0;
 
             /* Borders */
             --border-color: #E8EAED;
             --border-color-hover: #D1D5DB;
-            --border-color-focus: #4361EE;
+            --border-color-focus: #00B4A6;
 
             /* Shadows */
             --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
@@ -1656,7 +1656,7 @@
             };
 
             // Store user data in localStorage (in production, this would go to your backend)
-            localStorage.setItem('clinicalcanvas_new_user', JSON.stringify(userData));
+            localStorage.setItem('sessionably_new_user', JSON.stringify(userData));
             
             // Redirect to app with signup flag
             window.location.href = '/app.html?signup=true';

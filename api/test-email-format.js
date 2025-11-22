@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       console.log('📧 Using direct format');
     }
     
-    const { to, subject, body, htmlContent, textContent, from = 'noreply@clinicalcanvas.com' } = emailData;
+    const { to, subject, body, htmlContent, textContent, from = 'noreply@sessionably.com' } = emailData;
     
     console.log('📧 Email data:', { to, subject, body: body?.substring(0, 50), htmlContent: htmlContent?.substring(0, 50), textContent: textContent?.substring(0, 50) });
 

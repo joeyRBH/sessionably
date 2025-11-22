@@ -1,51 +1,51 @@
 /* ========================================================================
-   CLINICALCANVAS EHR - FORTUNE BRIGHT THEME
+   SESSIONABLY - PRACTICE MANAGEMENT SUITE
    Professional Healthcare Design System
-   Overrides existing SimplePractice-inspired styles with Fortune Bright
+   Brand Colors: Teal (#00B4A6), Amber (#F4A443), Navy (#1A1A2E)
    ======================================================================== */
 
 /* ========================================
    CSS VARIABLE OVERRIDES
    ======================================== */
 :root {
-    /* Fortune Theme Variables */
-    --fortune-primary-dark: #2563eb;
-    --fortune-primary-light: #60a5fa;
-    --fortune-pale-blue: #eff6ff;
-    --fortune-cream-blue: #f0f9ff;
-    --fortune-accent: #10b981;
-    --fortune-accent-hover: #059669;
+    /* Sessionably Brand Variables */
+    --fortune-primary-dark: #00B4A6;
+    --fortune-primary-light: #26C6BA;
+    --fortune-pale-blue: #E0F7F5;
+    --fortune-cream-blue: #F0FDFB;
+    --fortune-accent: #F4A443;
+    --fortune-accent-hover: #E09839;
 
-    /* Sessionably Brand Colors - Primary Blue & Accent Green */
-    --primary-color: #2563eb !important;           /* Primary Blue */
-    --primary-hover: #60a5fa !important;           /* Light Blue */
-    --primary-light: #60a5fa !important;           /* Light Blue */
-    --primary-subtle: #f1f5f9 !important;          /* Light Background */
+    /* Sessionably Brand Colors - Primary Teal & Accent Amber */
+    --primary-color: #00B4A6 !important;           /* Primary Teal */
+    --primary-hover: #009688 !important;           /* Dark Teal */
+    --primary-light: #26C6BA !important;           /* Light Teal */
+    --primary-subtle: #E0F7F5 !important;          /* Very Light Teal Background */
 
     /* Accent Color */
-    --accent-color: #10b981 !important;            /* Accent Green */
+    --accent-color: #F4A443 !important;            /* Accent Amber */
 
     /* Success/Warning/Danger States */
-    --success-color: #10b981 !important;           /* Accent Green */
+    --success-color: #10B981 !important;           /* Green */
     --warning-color: #F59E0B !important;
     --danger-color: #EF4444 !important;
 
     /* Background adjustments */
-    --background-gradient: linear-gradient(135deg, #FAFBFC 0%, #f1f5f9 100%) !important;
+    --background-gradient: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%) !important;
     --surface-color: #FFFFFF !important;
-    --surface-hover: #f1f5f9 !important;
+    --surface-hover: #E0F7F5 !important;
 
     /* Border focus color */
-    --border-color-focus: #60a5fa !important;
+    --border-color-focus: #26C6BA !important;
 
     /* Sessionably Brand Palette */
-    --primary-blue: #2563eb;
-    --light-blue: #60a5fa;
-    --accent-green: #10b981;
-    --light-green: #34d399;
-    --dark-text: #1e293b;
-    --secondary-text: #64748b;
-    --background-light: #f1f5f9;
+    --primary-teal: #00B4A6;
+    --light-teal: #26C6BA;
+    --accent-amber: #F4A443;
+    --light-amber: #F7B869;
+    --dark-text: #1A1A2E;
+    --secondary-text: #888888;
+    --background-light: #FAFAFA;
 
     /* Typography */
     --fortune-body-font: 'Karla', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

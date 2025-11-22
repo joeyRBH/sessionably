@@ -607,7 +607,7 @@ Dear ${client.name},
 A new document has been assigned to you: ${document.template_name}
 
 To complete this document securely, please visit:
-https://clinicalcanvas.vercel.app/client-portal
+https://sessionably.vercel.app/client-portal
 
 Your secure access code: ${document.auth_code}
 
@@ -626,7 +626,7 @@ ${practiceName}
                 <p>A new document has been assigned to you: <strong>${document.template_name}</strong></p>
                 <div class="info-block">
                     <strong>Secure Access Information</strong><br>
-                    Portal: <a href="https://clinicalcanvas.vercel.app/client-portal">https://clinicalcanvas.vercel.app/client-portal</a><br>
+                    Portal: <a href="https://sessionably.vercel.app/client-portal">https://sessionably.vercel.app/client-portal</a><br>
                     Access Code: <strong>${document.auth_code}</strong><br>
                     Expires: 7 days
                 </div>

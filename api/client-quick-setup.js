@@ -127,7 +127,7 @@ export default async function handler(req, res) {
 
     // Send welcome email
     try {
-      const portalLink = `${process.env.APP_URL || 'https://clinicalcanvas.com'}/client-portal.html`;
+      const portalLink = `${process.env.APP_URL || 'https://sessionably.com'}/client-portal.html`;
 
       await sendEmail({
         to: email,

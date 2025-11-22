@@ -55,7 +55,7 @@ export default async function handler(req, res) {
                 name: name,
                 metadata: {
                     userId: userId,
-                    source: 'clinicalcanvas'
+                    source: 'sessionably'
                 }
             });
         }
@@ -69,7 +69,7 @@ export default async function handler(req, res) {
             expand: ['latest_invoice.payment_intent'],
             metadata: {
                 userId: userId,
-                source: 'clinicalcanvas'
+                source: 'sessionably'
             }
         });
 

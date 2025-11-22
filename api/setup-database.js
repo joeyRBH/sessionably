@@ -223,7 +223,7 @@ CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 INSERT INTO users (username, password_hash, email, full_name, role)
-VALUES ('admin', '$2a$10$rK8qU5P8kZQxVZ9z9K7qYOqGZxJ8ZqK4K5q8K7qYOqGZxJ8ZqK4K5', 'admin@clinicalcanvas.com', 'System Administrator', 'admin')
+VALUES ('admin', '$2a$10$rK8qU5P8kZQxVZ9z9K7qYOqGZxJ8ZqK4K5q8K7qYOqGZxJ8ZqK4K5', 'admin@sessionably.com', 'System Administrator', 'admin')
 ON CONFLICT (username) DO NOTHING;
 
 INSERT INTO documents (title, description, document_type, is_template, content)
