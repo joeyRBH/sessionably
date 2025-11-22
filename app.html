@@ -211,9 +211,9 @@
             z-index: 100;
         }
 
-        .header h1 { 
-            color: var(--primary-color); 
-            font-size: 28px; 
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 28px;
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -221,15 +221,8 @@
         }
 
         .header .logo {
-            width: 32px;
-            height: 32px;
-            background: var(--primary-color);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
+            height: 40px;
+            width: auto;
         }
 
         .header-actions {
@@ -4318,8 +4311,9 @@
 </head>
 <body>
     <div class="auth-container" id="authContainer">
-        <h2>Sessionably</h2>
-        <p class="subtitle">HIPAA-compliant clinical documentation platform</p>
+        <div style="text-align: center; margin-bottom: 24px;">
+            <img src="/public/assets/logos/sessionably-logo.svg" alt="Sessionably - Practice Management Suite" style="height: 60px; width: auto; margin: 0 auto;">
+        </div>
 
         <div class="auth-tabs">
             <div class="auth-tab active" onclick="switchAuthTab('clinician')" role="tab" aria-selected="true">⚕ Clinician</div>
@@ -4383,8 +4377,7 @@
                     ☰
                 </button>
                 <h1>
-                    <img src="/icon.svg" alt="Sessionably Logo" class="logo" style="width: 40px; height: 40px; margin-right: 12px;">
-                    Sessionably
+                    <img src="/public/assets/logos/sessionably-logo.svg" alt="Sessionably - Practice Management Suite" class="logo">
                 </h1>
             </div>
             <div class="header-actions">
