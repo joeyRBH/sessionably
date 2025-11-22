@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     // Create test client if doesn't exist
     let clientResult = await executeQuery(
       `SELECT id FROM clients WHERE email = $1`,
-      ['testpatient@clinicalcanvas.com']
+      ['testpatient@sessionably.com']
     );
 
     let clientId;
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
         `INSERT INTO clients (name, email, phone, date_of_birth, status, created_at)
          VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
          RETURNING id`,
-        ['Test Patient', 'testpatient@clinicalcanvas.com', '555-123-4567', '1990-01-01', 'active']
+        ['Test Patient', 'testpatient@sessionably.com', '555-123-4567', '1990-01-01', 'active']
       );
 
       if (!clientResult.success) {
@@ -61,7 +61,7 @@ export default async function handler(req, res) {
       const createUserResult = await executeQuery(
         `INSERT INTO client_users (client_id, email, password_hash, is_active, is_verified, created_at, updated_at)
          VALUES ($1, $2, $3, true, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
-        [clientId, 'testpatient@clinicalcanvas.com', passwordHash]
+        [clientId, 'testpatient@sessionably.com', passwordHash]
       );
 
       if (!createUserResult.success) {
@@ -141,7 +141,7 @@ export default async function handler(req, res) {
         ? 'Test account refreshed with sample data!'
         : 'Test account created successfully with sample data!',
       credentials: {
-        email: 'testpatient@clinicalcanvas.com',
+        email: 'testpatient@sessionably.com',
         password: 'testpassword123',
         note: 'Use these credentials to log in at /client-portal.html'
       },

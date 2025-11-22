@@ -61,7 +61,7 @@ export default async function handler(req, res) {
             `INSERT INTO users (username, password_hash, name, email, role) 
              VALUES ($1, $2, $3, $4, $5) 
              RETURNING id, username, name, role`,
-            ['admin', passwordHash, 'Admin User', 'admin@clinicalcanvas.com', 'admin']
+            ['admin', passwordHash, 'Admin User', 'admin@sessionably.com', 'admin']
         );
 
         if (!insertResult.success) {

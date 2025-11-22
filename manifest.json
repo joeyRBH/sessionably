@@ -4,8 +4,8 @@
   "description": "HIPAA-compliant clinical documentation platform",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#2563eb",
-  "theme_color": "#2563eb",
+  "background_color": "#00B4A6",
+  "theme_color": "#00B4A6",
   "orientation": "portrait-primary",
   "icons": [
     {

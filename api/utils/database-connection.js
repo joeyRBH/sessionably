@@ -36,7 +36,7 @@ async function initDatabase() {
 
       // Automatic reconnection
       connection: {
-        application_name: 'clinicalcanvas-ehr'
+        application_name: 'sessionably'
       },
 
       // Transform column names from snake_case to camelCase

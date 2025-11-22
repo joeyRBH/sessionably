@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sessionably - Practice Management</title>
     <meta name="description" content="HIPAA-compliant clinical documentation platform with modern UI and advanced features">
-    <meta name="theme-color" content="#4361EE">
+    <meta name="theme-color" content="#00B4A6">
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" type="image/svg+xml" href="/icon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,25 +17,25 @@
     <style>
         
         :root {
-            /* SimplePractice-inspired Color Palette */
-            --primary-color: #4361EE;           /* Professional indigo blue */
-            --primary-hover: #3651DD;           /* Darker shade on hover */
-            --primary-light: #5B7BFF;           /* Light variant */
-            --primary-subtle: #EEF2FF;          /* Very light background */
-            --secondary-color: #6C757D;         /* Grey for secondary elements */
-            --accent-color: #0EA5E9;            /* Cyan/blue accent */
+            /* Sessionably Brand Color Palette */
+            --primary-color: #00B4A6;           /* Primary Teal */
+            --primary-hover: #009688;           /* Dark Teal */
+            --primary-light: #26C6BA;           /* Light Teal */
+            --primary-subtle: #E0F7F5;          /* Very light teal background */
+            --secondary-color: #888888;         /* Grey for secondary elements */
+            --accent-color: #F4A443;            /* Accent Amber */
             --success-color: #10B981;           /* Green for success states */
             --warning-color: #F59E0B;           /* Amber/orange for warnings */
             --danger-color: #EF4444;            /* Red for errors/danger */
 
             /* Text Colors */
-            --text-primary: #1A1D1F;            /* Dark grey for main text */
-            --text-secondary: #6C757D;          /* Medium grey for secondary text */
+            --text-primary: #1A1A2E;            /* Navy for main text */
+            --text-secondary: #888888;          /* Medium grey for secondary text */
             --text-tertiary: #9EA4AA;           /* Light grey for tertiary text */
             --text-muted: #CBD5E0;              /* Very light grey for muted text */
 
             /* Background Colors */
-            --background-gradient: linear-gradient(135deg, #FAFBFC 0%, #F5F6F8 100%);
+            --background-gradient: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
             --surface-color: #FFFFFF;           /* Main surface/card background */
             --surface-elevated: #FFFFFF;        /* Elevated surfaces */
             --surface-hover: #F8F9FA;           /* Hover state background */
@@ -43,7 +43,7 @@
             /* Border Colors */
             --border-color: #E8EAED;            /* Subtle borders */
             --border-color-hover: #D1D5DB;      /* Border on hover */
-            --border-color-focus: #4361EE;      /* Border on focus */
+            --border-color-focus: #00B4A6;      /* Border on focus */
 
             /* Shadows - SimplePractice-style layered shadows */
             --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
@@ -4405,7 +4405,7 @@
                     <div class="user-menu-dropdown" id="userMenuDropdown">
                         <div class="user-menu-header">
                             <div class="user-menu-header-name" id="dropdownUserName">Admin User</div>
-                            <div class="user-menu-header-email" id="dropdownUserEmail">admin@clinicalcanvas.com</div>
+                            <div class="user-menu-header-email" id="dropdownUserEmail">support@sessionably.com</div>
                 </div>
                         <div class="user-menu-item" onclick="openProfileModal()">
                             <svg class="user-menu-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -6376,7 +6376,7 @@ function clearSession() {
 
 // localStorage management functions
 function getStorageKey(key) {
-    return `clinicalcanvas_${key}`;
+    return `sessionably_${key}`;
 }
 
 function saveToStorage(key, data) {
@@ -6421,7 +6421,7 @@ function initializeDemoData() {
     // Check for signup flow
     const urlParams = new URLSearchParams(window.location.search);
     const isSignup = urlParams.get('signup') === 'true';
-    const newUserData = localStorage.getItem('clinicalcanvas_new_user');
+    const newUserData = localStorage.getItem('sessionably_new_user');
     
     if (isSignup && newUserData) {
         console.log('[NEW] Signup flow detected');
@@ -6440,7 +6440,7 @@ function initializeDemoData() {
             username: 'Joe',
             password: 'Mo',
             fullName: 'Joe',
-            email: 'joe@clinicalcanvas.com',
+            email: 'admin@sessionably.com',
             role: 'admin',
             createdAt: new Date().toISOString(),
             isActive: true,
@@ -10627,7 +10627,7 @@ async function handleNewUserSignup(userData) {
         });
         
         // Clean up signup data
-        localStorage.removeItem('clinicalcanvas_new_user');
+        localStorage.removeItem('sessionably_new_user');
         
         // Send welcome email
         await sendWelcomeEmail(userData);
@@ -14024,7 +14024,7 @@ function toggleAINoteTaker(appointmentId, enabled) {
     if (!appointment) return;
 
     appointment.ai_notetaker_enabled = enabled;
-    saveToStorage('clinicalcanvas_appointments', appointments);
+    saveToStorage('sessionably_appointments', appointments);
 
     // Log the change
     logAuditEvent('ai_notetaker_toggled', `AI NoteTaker ${enabled ? 'enabled' : 'disabled'} for appointment #${appointmentId}`);
@@ -17626,7 +17626,7 @@ let notificationCount = 0;
 // Initialize notifications
 function initNotifications() {
     // Load saved notifications from localStorage
-    const savedNotifications = localStorage.getItem('clinicalcanvas_notifications');
+    const savedNotifications = localStorage.getItem('sessionably_notifications');
     if (savedNotifications) {
         notifications = JSON.parse(savedNotifications);
         updateNotificationBadge();
@@ -18013,7 +18013,7 @@ function updateNotificationBadge() {
 }
 
 function saveNotifications() {
-    localStorage.setItem('clinicalcanvas_notifications', JSON.stringify(notifications));
+    localStorage.setItem('sessionably_notifications', JSON.stringify(notifications));
 }
 
 // Request notification permission
@@ -18320,7 +18320,7 @@ function updateUserMenu() {
     if (userName) userName.textContent = user.name || 'Admin';
     if (userAvatar) userAvatar.textContent = (user.name || 'A').charAt(0).toUpperCase();
     if (dropdownUserName) dropdownUserName.textContent = user.name || 'Admin User';
-    if (dropdownUserEmail) dropdownUserEmail.textContent = user.email || 'admin@clinicalcanvas.com';
+    if (dropdownUserEmail) dropdownUserEmail.textContent = user.email || 'support@sessionably.com';
 }
 
 function toggleUserMenu() {

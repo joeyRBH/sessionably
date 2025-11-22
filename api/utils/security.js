@@ -29,8 +29,7 @@ function isOriginAllowed(origin) {
   
   if (allowed.includes(origin)) return true;
   
-  if (origin.includes('.vercel.app') && origin.includes('clinicalcanvas')) return true;
-  if (origin.includes('.vercel.app') && origin.includes('clinicalspeak')) return true;
+  if (origin.includes('.vercel.app') && origin.includes('sessionably')) return true;
   
   return false;
 }

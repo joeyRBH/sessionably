@@ -363,7 +363,7 @@ CREATE TRIGGER update_practice_settings_updated_at BEFORE UPDATE ON practice_set
 -- Insert demo admin user (password: admin123)
 -- Note: In production, use proper password hashing (bcrypt)
 INSERT INTO users (username, password_hash, email, full_name, role)
-VALUES ('admin', '$2a$10$rK8qU5P8kZQxVZ9z9K7qYOqGZxJ8ZqK4K5q8K7qYOqGZxJ8ZqK4K5', 'admin@clinicalcanvas.com', 'System Administrator', 'admin')
+VALUES ('admin', '$2a$10$rK8qU5P8kZQxVZ9z9K7qYOqGZxJ8ZqK4K5q8K7qYOqGZxJ8ZqK4K5', 'admin@sessionably.com', 'System Administrator', 'admin')
 ON CONFLICT (username) DO NOTHING;
 
 -- Insert demo document templates
