@@ -2,19 +2,11 @@
   <!-- Background -->
   <rect width="512" height="512" rx="100" fill="#00B4A6"/>
 
-  <!-- Sessionably Symbol -->
-  <g transform="translate(106, 106)">
-    <!-- Canvas Frame -->
-    <path d="M 30 30 L 30 270 M 270 30 L 270 270 M 30 30 L 270 30 L 270 270 L 30 270 Z"
-          stroke="#ffffff" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-
-    <!-- Pulse line inside canvas -->
-    <path d="M 60 150 L 108 150 L 132 90 L 156 210 L 180 120 L 204 150 L 240 150"
-          stroke="#F4A443" stroke-width="15" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-
-    <!-- Medical cross accent -->
-    <circle cx="240" cy="60" r="42" fill="#ffffff"/>
-    <path d="M 240 36 L 240 84 M 216 60 L 264 60"
-          stroke="#00B4A6" stroke-width="12" stroke-linecap="round"/>
+  <!-- Two overlapping circles (centered) -->
+  <g transform="translate(130, 180)">
+    <!-- Teal circle (left) - White on teal background -->
+    <circle cx="100" cy="76" r="70" fill="none" stroke="#FFFFFF" stroke-width="16"/>
+    <!-- Amber circle (right) -->
+    <circle cx="152" cy="76" r="70" fill="none" stroke="#F4A443" stroke-width="16"/>
   </g>
 </svg>

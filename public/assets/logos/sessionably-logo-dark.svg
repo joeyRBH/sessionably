@@ -1,15 +1,15 @@
-<svg width="300" height="80" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
-    <g transform="translate(10, 15)">
-        <path d="M 5 5 L 5 45 M 45 5 L 45 45 M 5 5 L 45 5 L 45 45 L 5 45 Z"
-              stroke="#26C6BA" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M 10 25 L 18 25 L 22 15 L 26 35 L 30 20 L 34 25 L 40 25"
-              stroke="#F4A443" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="40" cy="10" r="7" fill="#26C6BA"/>
-        <path d="M 40 6 L 40 14 M 36 10 L 44 10"
-              stroke="#1A1A2E" stroke-width="2" stroke-linecap="round"/>
+<svg width="400" height="100" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Two overlapping circles -->
+    <g transform="translate(20, 25)">
+        <!-- Teal circle (left) -->
+        <circle cx="25" cy="25" r="23" fill="none" stroke="#00B4A6" stroke-width="4"/>
+        <!-- Amber circle (right) -->
+        <circle cx="45" cy="25" r="23" fill="none" stroke="#F4A443" stroke-width="4"/>
     </g>
-    <text x="75" y="35" font-family="system-ui, -apple-system, sans-serif"
-          font-size="24" font-weight="700" fill="#FFFFFF">Sessionably</text>
-    <text x="75" y="52" font-family="system-ui, -apple-system, sans-serif"
-          font-size="11" font-weight="400" fill="#CBD5E0" letter-spacing="1">PRACTICE MANAGEMENT SUITE</text>
+
+    <!-- Text -->
+    <text x="100" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="32" font-weight="600" fill="#FFFFFF" letter-spacing="3">SESSIONABLY</text>
+    <text x="100" y="65" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+          font-size="12" font-weight="400" fill="#FAFAFA" letter-spacing="1">PRACTICE MANAGEMENT SUITE</text>
 </svg>
