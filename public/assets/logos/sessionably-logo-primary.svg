@@ -9,9 +9,9 @@
 
   <!-- Sessionably Text -->
   <text x="70" y="38" font-family="system-ui, -apple-system, sans-serif"
-        font-size="26" font-weight="700" fill="#1A1A2E">Sessionably</text>
+        font-size="26" font-weight="600" fill="#1A1A2E" letter-spacing="3">SESSIONABLY</text>
 
   <!-- Tagline -->
   <text x="70" y="55" font-family="system-ui, -apple-system, sans-serif"
-        font-size="11" font-weight="400" fill="#888888" letter-spacing="1">PRACTICE MANAGEMENT SUITE</text>
+        font-size="11" font-weight="400" fill="#888888" letter-spacing="3">PRACTICE MANAGEMENT SUITE</text>
 </svg>
