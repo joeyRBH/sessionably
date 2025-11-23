@@ -82,8 +82,8 @@ h1, h2, h3, h4, h5, h6,
 button.btn-primary,
 a.btn-primary,
 .btn.btn-primary {
-    background: var(--primary-blue) !important;
-    border-color: var(--primary-blue) !important;
+    background: var(--fortune-primary-dark) !important;
+    border-color: var(--fortune-primary-dark) !important;
     color: white !important;
     transition: all 0.2s ease !important;
 }
@@ -91,24 +91,26 @@ a.btn-primary,
 .btn-primary:hover,
 button.btn-primary:hover,
 a.btn-primary:hover {
-    background: var(--light-blue) !important;
-    border-color: var(--light-blue) !important;
+    background: var(--fortune-primary-light) !important;
+    border-color: var(--fortune-primary-light) !important;
     transform: translateY(-1px) !important;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(0, 180, 166, 0.3) !important;
 }
 
 .btn-secondary,
 button.btn-secondary,
 a.btn-secondary {
-    color: var(--primary-blue) !important;
-    border-color: var(--primary-blue) !important;
+    background: white !important;
+    color: var(--fortune-primary-dark) !important;
+    border-color: var(--fortune-primary-dark) !important;
 }
 
 .btn-secondary:hover,
 button.btn-secondary:hover,
 a.btn-secondary:hover {
-    background: var(--fortune-pale-blue) !important;
-    border-color: var(--fortune-primary-light) !important;
+    background: var(--fortune-primary-dark) !important;
+    color: white !important;
+    border-color: var(--fortune-primary-dark) !important;
 }
 
 /* Accent buttons */
