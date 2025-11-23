@@ -3,19 +3,19 @@
     <g transform="translate(10, 15)">
         <!-- Easel/Canvas Frame -->
         <path d="M 5 5 L 5 45 M 45 5 L 45 45 M 5 5 L 45 5 L 45 45 L 5 45 Z"
-              stroke="#00B4A6" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              stroke="#2563eb" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
         <!-- Pulse line inside canvas -->
         <path d="M 10 25 L 18 25 L 22 15 L 26 35 L 30 20 L 34 25 L 40 25"
-              stroke="#F4A443" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              stroke="#10b981" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
         <!-- Medical cross accent -->
-        <circle cx="40" cy="10" r="7" fill="#00B4A6"/>
+        <circle cx="40" cy="10" r="7" fill="#2563eb"/>
         <path d="M 40 6 L 40 14 M 36 10 L 44 10"
               stroke="white" stroke-width="2" stroke-linecap="round"/>
     </g>
 
     <!-- Text -->
     <text x="75" y="35" font-family="system-ui, -apple-system, sans-serif"
-          font-size="24" font-weight="700" fill="#1A1A2E">Sessionably</text>
+          font-size="24" font-weight="700" fill="#1e293b">Sessionably</text>
     <text x="75" y="52" font-family="system-ui, -apple-system, sans-serif"
-          font-size="11" font-weight="400" fill="#888888" letter-spacing="1">PRACTICE MANAGEMENT SUITE</text>
+          font-size="11" font-weight="400" fill="#64748b" letter-spacing="1">PRACTICE MANAGEMENT SUITE</text>
 </svg>
