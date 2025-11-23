@@ -226,6 +226,7 @@ label {
 }
 
 .hero h1 {
+    font-size: 80px !important;
     color: var(--fortune-primary-dark) !important;
     font-family: var(--fortune-heading-font) !important;
 }
@@ -582,7 +583,7 @@ tr:hover {
 
 @media (max-width: 850px) {
     .hero h1 {
-        font-size: 2rem !important;
+        font-size: 48px !important;
     }
 }
 
