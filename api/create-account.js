@@ -133,13 +133,13 @@ export default async function handler(req, res) {
       priceId = priceIds.complete;
     }
 
-    // Create Stripe subscription with 14-day trial
+    // Create Stripe subscription with 7-day trial
     let subscription;
     try {
       subscription = await stripe.subscriptions.create({
         customer: stripeCustomer.id,
         items: [{ price: priceId }],
-        trial_period_days: 14,
+        trial_period_days: 7,
         payment_behavior: 'default_incomplete',
         expand: ['latest_invoice.payment_intent'],
         metadata: {
@@ -230,10 +230,10 @@ export default async function handler(req, res) {
         plan: plan,
         addOn: addOn || 'none',
         trialEnd: new Date(subscription.trial_end * 1000),
-        amount: plan === 'essential' ? 35 : plan === 'complete' ? 65 : 50
+        amount: plan === 'essential' ? 40 : plan === 'complete' ? 80 : 60
       },
       nextSteps: {
-        message: 'Your 14-day free trial has started!',
+        message: 'Your 7-day free trial has started!',
         actions: [
           'Complete your practice profile',
           'Add your first client',

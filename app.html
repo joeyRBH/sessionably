@@ -9557,10 +9557,10 @@ function loadSubscriptionSettings() {
         status: 'trial',
         plan: 'professional',  // essential, professional, or complete
         tier: 'Professional',  // Display name
-        price: 50,             // $35 for essential, $50 for professional, $65 for complete
+        price: 60,             // $40 for essential, $60 for professional, $80 for complete
         trialStartDate: new Date().toISOString(),
-        trialEndDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
-        nextBillingDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+        trialEndDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+        nextBillingDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         createdAt: new Date().toISOString()
     });
 
@@ -9807,7 +9807,7 @@ async function startSubscription() {
                 email: currentUser.email,
                 name: currentUser.name,
                 userId: currentUser.id,
-                priceId: 'price_1SJ5QBKfOEPgyMAo8K8vQ2Xx' // $50/month
+                priceId: 'price_1SJ5QBKfOEPgyMAo8K8vQ2Xx' // $60/month
             })
         });
 
@@ -9973,7 +9973,7 @@ async function cancelSubscription() {
 }
 
 async function reactivateSubscription() {
-    if (confirm('Reactivate your subscription for $50/month?')) {
+    if (confirm('Reactivate your subscription for $60/month?')) {
         try {
             showLoadingState('Reactivating subscription...');
             
@@ -10657,7 +10657,7 @@ async function handleNewUserSignup(userData) {
     }
     
     // Show welcome message
-    showNotification(`Welcome to Sessionably, ${userData.firstName}! Your 14-day free trial has started.`, 'success');
+    showNotification(`Welcome to Sessionably, ${userData.firstName}! Your 7-day free trial has started.`, 'success');
     
     setTimeout(async () => {
         // Auto-login
@@ -10711,14 +10711,14 @@ function showTrialWelcome() {
             <h2 style="text-align: center; color: var(--primary-color);">🎉 Welcome to Sessionably!</h2>
             <div style="text-align: center; margin: 20px 0;">
                 <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 15px;">
-                    Your 14-day free trial has started!
+                    Your 7-day free trial has started!
                 </p>
                 <div style="background: var(--primary-color); color: white; padding: 15px; border-radius: 8px; margin: 15px 0;">
                     <strong>${daysLeft} days remaining</strong><br>
                     <small>Trial ends: ${trialEndDate.toLocaleDateString()}</small>
                 </div>
                 <p style="font-size: 0.9rem; color: var(--text-secondary);">
-                    After your trial, you'll be charged $50/month per clinician. You can cancel anytime.
+                    After your trial, you'll be charged $60/month per clinician. You can cancel anytime.
                 </p>
             </div>
             <div style="text-align: center; margin-top: 20px;">
@@ -10815,7 +10815,7 @@ function generateWelcomeEmailTemplate(userData) {
                     <h3>Your Free Trial is Active</h3>
                     <p><strong>${daysLeft} days remaining</strong> in your free trial</p>
                     <p>Trial ends: ${trialEndDate.toLocaleDateString()}</p>
-                    <p>After your trial, you'll be charged $50/month per clinician. You can cancel anytime.</p>
+                    <p>After your trial, you'll be charged $60/month per clinician. You can cancel anytime.</p>
                 </div>
                 
                 <h3>Getting Started</h3>
@@ -10873,7 +10873,7 @@ Welcome to Sessionably! We're excited to help you streamline your mental health 
 Your Free Trial is Active:
 - ${daysLeft} days remaining
 - Trial ends: ${trialEndDate.toLocaleDateString()}
-- After your trial: $50/month per clinician
+- After your trial: $60/month per clinician
 
 Getting Started:
 1. Add your first client and create appointments
@@ -11116,7 +11116,7 @@ function generateTrialReminderTemplate(userData, daysLeft) {
                 </div>
                 <p>Subscribe now to continue using Sessionably with unlimited clients, AI-powered notes, and secure document storage.</p>
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="https://sessionably.com/app.html" class="button">Subscribe Now - $50/month</a>
+                    <a href="https://sessionably.com/app.html" class="button">Subscribe Now - $60/month</a>
                 </div>
                 <p>Questions? Contact us at support@sessionably.com</p>
             </div>
@@ -11168,7 +11168,7 @@ function generateTrialExpiredTemplate(userData) {
                 </div>
                 <p>Subscribe now to regain access to all your client data and practice management tools.</p>
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="https://sessionably.com/app.html" class="button">Subscribe Now - $50/month</a>
+                    <a href="https://sessionably.com/app.html" class="button">Subscribe Now - $60/month</a>
                 </div>
                 <p>Need help? Contact us at support@sessionably.com</p>
             </div>
