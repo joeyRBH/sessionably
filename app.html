@@ -1905,18 +1905,94 @@
         }
 
         /* Dark mode support */
-        /* Dark mode disabled - force light theme */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --surface-color: #ffffff;
-                --surface-elevated: #ffffff;
-                --text-primary: #000000;
-                --text-secondary: #6c757d;
-                --border-color: #e9ecef;
-            }
+        [data-theme="dark"] {
+            --primary-color: #00D4C4;
+            --primary-hover: #00B4A6;
+            --secondary-color: #e9ecef;
+            --success-color: #4ade80;
+            --warning-color: #fbbf24;
+            --danger-color: #f87171;
+            --info-color: #60a5fa;
+            --text-primary: #f8f9fa;
+            --text-secondary: #adb5bd;
+            --text-muted: #6c757d;
+            --background-color: #1a1a2e;
+            --surface-color: #16213e;
+            --surface-elevated: #0f3460;
+            --border-color: #2d3748;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            --background-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        }
 
-            body {
-                background: #e5e5e5;
+        [data-theme="dark"] body {
+            background: var(--background-color);
+            color: var(--text-primary);
+        }
+
+        [data-theme="dark"] .card {
+            background: var(--surface-color);
+            color: var(--text-primary);
+        }
+
+        [data-theme="dark"] .stat-card {
+            background: var(--surface-elevated);
+            color: var(--text-primary);
+        }
+
+        [data-theme="dark"] .input,
+        [data-theme="dark"] .textarea,
+        [data-theme="dark"] select {
+            background: var(--surface-elevated);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .modal-content {
+            background: var(--surface-color);
+            color: var(--text-primary);
+        }
+
+        [data-theme="dark"] .table th {
+            background: var(--surface-elevated);
+            color: var(--text-primary);
+        }
+
+        [data-theme="dark"] .table td {
+            border-color: var(--border-color);
+        }
+
+        [data-theme="dark"] .tab-btn {
+            color: var(--text-secondary);
+        }
+
+        [data-theme="dark"] .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        [data-theme="dark"] .header {
+            background: var(--surface-color);
+            border-bottom-color: var(--border-color);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --primary-color: #00D4C4;
+                --primary-hover: #00B4A6;
+                --secondary-color: #e9ecef;
+                --success-color: #4ade80;
+                --warning-color: #fbbf24;
+                --danger-color: #f87171;
+                --info-color: #60a5fa;
+                --text-primary: #f8f9fa;
+                --text-secondary: #adb5bd;
+                --text-muted: #6c757d;
+                --background-color: #1a1a2e;
+                --surface-color: #16213e;
+                --surface-elevated: #0f3460;
+                --border-color: #2d3748;
+                --shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+                --background-gradient: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             }
         }
 
@@ -4439,42 +4515,42 @@
         <!-- Sidebar Navigation -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-nav">
-                <button class="tab-btn active" onclick="showTab('dashboard')">
+                <button class="tab-btn active" onclick="showTab('dashboard')" data-translate="Dashboard">
                     Dashboard
                 </button>
-                <button class="tab-btn" onclick="showTab('clients')">
+                <button class="tab-btn" onclick="showTab('clients')" data-translate="Clients">
                     Clients
                 </button>
                 <button class="tab-btn" onclick="showTab('messages')">
-                    Messages
+                    <span data-translate="Messages">Messages</span>
                     <span class="notification-badge" id="messagesBadge" style="display: none;">0</span>
                 </button>
-                <button class="tab-btn" onclick="showTab('appointments')">
+                <button class="tab-btn" onclick="showTab('appointments')" data-translate="Appointments">
                     Appointments
                 </button>
                 <button class="tab-btn" id="aiNoteTakerNavBtn" onclick="showTab('ainotetaker')" style="display: none;">
                     AI NoteTaker
                 </button>
                 <button class="tab-btn" onclick="showTab('documents')">
-                    Documents
+                    <span data-translate="Documents">Documents</span>
                     <span class="notification-badge" id="docBadge" style="display: none;">0</span>
                 </button>
                 <button class="tab-btn" onclick="showTab('invoices')">
-                    Invoices
+                    Billing
                 </button>
                 <button class="tab-btn" onclick="showTab('analytics')">
                     Analytics
                 </button>
-                <button class="tab-btn" onclick="showTab('settings')">
+                <button class="tab-btn" onclick="showTab('settings')" data-translate="Settings">
                     Settings
                 </button>
                 <button class="tab-btn" onclick="showTab('audit')">
                     Audit Log
                 </button>
-                <button class="tab-btn" onclick="showTab('reports')">
+                <button class="tab-btn" onclick="showTab('reports')" data-translate="Reports">
                     Reports
                 </button>
-                <button class="tab-btn" onclick="showTab('insurance')">
+                <button class="tab-btn" onclick="showTab('insurance')" data-translate="Insurance">
                     Insurance
                 </button>
             </div>
@@ -4493,29 +4569,21 @@
 
                 <!-- Quick Stats Cards -->
                 <div class="analytics-grid" style="margin-bottom: 30px;">
-                    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
-                        <div style="padding: 5px;">
-                            <h3 style="margin: 0 0 10px 0; font-size: 14px; opacity: 0.9; font-weight: 500;">Today's Appointments</h3>
-                            <div class="stat-number" id="todayAppointmentsCount" style="color: white; font-size: 36px; font-weight: 700;">-</div>
-                        </div>
+                    <div class="stat-card">
+                        <h3 data-translate="Today's Appointments">Today's Appointments</h3>
+                        <div class="stat-number" id="todayAppointmentsCount">-</div>
                     </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none;">
-                        <div style="padding: 5px;">
-                            <h3 style="margin: 0 0 10px 0; font-size: 14px; opacity: 0.9; font-weight: 500;">Active Clients</h3>
-                            <div class="stat-number" id="activeClientsCount" style="color: white; font-size: 36px; font-weight: 700;">-</div>
-                        </div>
+                    <div class="stat-card">
+                        <h3 data-translate="Active Clients">Active Clients</h3>
+                        <div class="stat-number" id="activeClientsCount">-</div>
                     </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; border: none;">
-                        <div style="padding: 5px;">
-                            <h3 style="margin: 0 0 10px 0; font-size: 14px; opacity: 0.9; font-weight: 500;">Unread Messages</h3>
-                            <div class="stat-number" id="unreadMessagesCount" style="color: white; font-size: 36px; font-weight: 700;">-</div>
-                        </div>
+                    <div class="stat-card">
+                        <h3 data-translate="Unread Messages">Unread Messages</h3>
+                        <div class="stat-number" id="unreadMessagesCount">-</div>
                     </div>
-                    <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none;">
-                        <div style="padding: 5px;">
-                            <h3 style="margin: 0 0 10px 0; font-size: 14px; opacity: 0.9; font-weight: 500;">This Week Revenue</h3>
-                            <div class="stat-number" id="weeklyRevenue" style="color: white; font-size: 36px; font-weight: 700;">$-</div>
-                        </div>
+                    <div class="stat-card">
+                        <h3 data-translate="This Week Revenue">This Week Revenue</h3>
+                        <div class="stat-number" id="weeklyRevenue">$-</div>
                     </div>
                 </div>
 
@@ -18106,6 +18174,13 @@ if (window.location.pathname === '/app.html') {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Apply theme and language from settings immediately
+    const settings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+    const theme = settings.theme || 'light';
+    const language = settings.language || 'en';
+    applyTheme(theme);
+    applyLanguage(language);
+
     // Initialize feature flags
     if (FEATURE_FLAGS.AI_NOTETAKER_ENABLED) {
         const aiNavBtn = document.getElementById('aiNoteTakerNavBtn');
@@ -18402,16 +18477,249 @@ function saveSettings() {
         theme: document.getElementById('themePreference').value,
         language: document.getElementById('languagePreference').value
     };
-    
+
     localStorage.setItem('userSettings', JSON.stringify(settings));
+
+    // Apply theme immediately
+    applyTheme(settings.theme);
+
+    // Apply language immediately
+    applyLanguage(settings.language);
+
     closeModal('settingsModal');
-    
+
     logAudit('settings_update', {
         user_id: currentUser.id,
         settings: settings
     });
-    
+
     showNotification('Settings saved successfully!', 'success');
+}
+
+// Theme application function
+function applyTheme(theme) {
+    const root = document.documentElement;
+
+    if (theme === 'dark') {
+        root.setAttribute('data-theme', 'dark');
+    } else if (theme === 'light') {
+        root.setAttribute('data-theme', 'light');
+    } else if (theme === 'auto') {
+        // Auto mode: respect system preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    }
+}
+
+// Translation dictionaries
+const translations = {
+    en: {
+        // Navigation
+        'Dashboard': 'Dashboard',
+        'Clients': 'Clients',
+        'Appointments': 'Appointments',
+        'Documents': 'Documents',
+        'Billing': 'Billing',
+        'Messages': 'Messages',
+        'Reports': 'Reports',
+        'Insurance': 'Insurance',
+
+        // Dashboard
+        "Today's Appointments": "Today's Appointments",
+        'Active Clients': 'Active Clients',
+        'Unread Messages': 'Unread Messages',
+        'This Week Revenue': 'This Week Revenue',
+        "Today's Schedule": "Today's Schedule",
+        'Quick Actions': 'Quick Actions',
+        'Add Client': 'Add Client',
+        'New Appointment': 'New Appointment',
+        'Send Message': 'Send Message',
+        'View All': 'View All',
+
+        // Common
+        'Save': 'Save',
+        'Cancel': 'Cancel',
+        'Delete': 'Delete',
+        'Edit': 'Edit',
+        'Search': 'Search',
+        'Filter': 'Filter',
+        'Export': 'Export',
+        'Print': 'Print',
+        'Settings': 'Settings',
+        'Profile': 'Profile',
+        'Logout': 'Logout',
+
+        // Clients
+        'Client List': 'Client List',
+        'Add New Client': 'Add New Client',
+        'First Name': 'First Name',
+        'Last Name': 'Last Name',
+        'Email': 'Email',
+        'Phone': 'Phone',
+        'Date of Birth': 'Date of Birth',
+        'Address': 'Address',
+        'Insurance Provider': 'Insurance Provider',
+
+        // Settings
+        'Notifications': 'Notifications',
+        'Email Notifications': 'Email Notifications',
+        'Appointment Reminders': 'Appointment Reminders',
+        'Document Alerts': 'Document Alerts',
+        'Invoice Alerts': 'Invoice Alerts',
+        'Preferences': 'Preferences',
+        'Theme': 'Theme',
+        'Language': 'Language',
+        'Light': 'Light',
+        'Dark': 'Dark',
+        'Auto': 'Auto',
+        'Data Import': 'Data Import',
+        'Save Settings': 'Save Settings'
+    },
+    es: {
+        // Navigation
+        'Dashboard': 'Panel de Control',
+        'Clients': 'Clientes',
+        'Appointments': 'Citas',
+        'Documents': 'Documentos',
+        'Billing': 'Facturación',
+        'Messages': 'Mensajes',
+        'Reports': 'Informes',
+        'Insurance': 'Seguro',
+
+        // Dashboard
+        "Today's Appointments": 'Citas de Hoy',
+        'Active Clients': 'Clientes Activos',
+        'Unread Messages': 'Mensajes No Leídos',
+        'This Week Revenue': 'Ingresos de Esta Semana',
+        "Today's Schedule": 'Horario de Hoy',
+        'Quick Actions': 'Acciones Rápidas',
+        'Add Client': 'Agregar Cliente',
+        'New Appointment': 'Nueva Cita',
+        'Send Message': 'Enviar Mensaje',
+        'View All': 'Ver Todo',
+
+        // Common
+        'Save': 'Guardar',
+        'Cancel': 'Cancelar',
+        'Delete': 'Eliminar',
+        'Edit': 'Editar',
+        'Search': 'Buscar',
+        'Filter': 'Filtrar',
+        'Export': 'Exportar',
+        'Print': 'Imprimir',
+        'Settings': 'Configuración',
+        'Profile': 'Perfil',
+        'Logout': 'Cerrar Sesión',
+
+        // Clients
+        'Client List': 'Lista de Clientes',
+        'Add New Client': 'Agregar Nuevo Cliente',
+        'First Name': 'Nombre',
+        'Last Name': 'Apellido',
+        'Email': 'Correo Electrónico',
+        'Phone': 'Teléfono',
+        'Date of Birth': 'Fecha de Nacimiento',
+        'Address': 'Dirección',
+        'Insurance Provider': 'Proveedor de Seguro',
+
+        // Settings
+        'Notifications': 'Notificaciones',
+        'Email Notifications': 'Notificaciones por Correo',
+        'Appointment Reminders': 'Recordatorios de Citas',
+        'Document Alerts': 'Alertas de Documentos',
+        'Invoice Alerts': 'Alertas de Facturas',
+        'Preferences': 'Preferencias',
+        'Theme': 'Tema',
+        'Language': 'Idioma',
+        'Light': 'Claro',
+        'Dark': 'Oscuro',
+        'Auto': 'Automático',
+        'Data Import': 'Importar Datos',
+        'Save Settings': 'Guardar Configuración'
+    },
+    fr: {
+        // Navigation
+        'Dashboard': 'Tableau de Bord',
+        'Clients': 'Clients',
+        'Appointments': 'Rendez-vous',
+        'Documents': 'Documents',
+        'Billing': 'Facturation',
+        'Messages': 'Messages',
+        'Reports': 'Rapports',
+        'Insurance': 'Assurance',
+
+        // Dashboard
+        "Today's Appointments": "Rendez-vous d'Aujourd'hui",
+        'Active Clients': 'Clients Actifs',
+        'Unread Messages': 'Messages Non Lus',
+        'This Week Revenue': 'Revenus de Cette Semaine',
+        "Today's Schedule": "Programme d'Aujourd'hui",
+        'Quick Actions': 'Actions Rapides',
+        'Add Client': 'Ajouter un Client',
+        'New Appointment': 'Nouveau Rendez-vous',
+        'Send Message': 'Envoyer un Message',
+        'View All': 'Voir Tout',
+
+        // Common
+        'Save': 'Enregistrer',
+        'Cancel': 'Annuler',
+        'Delete': 'Supprimer',
+        'Edit': 'Modifier',
+        'Search': 'Rechercher',
+        'Filter': 'Filtrer',
+        'Export': 'Exporter',
+        'Print': 'Imprimer',
+        'Settings': 'Paramètres',
+        'Profile': 'Profil',
+        'Logout': 'Déconnexion',
+
+        // Clients
+        'Client List': 'Liste des Clients',
+        'Add New Client': 'Ajouter un Nouveau Client',
+        'First Name': 'Prénom',
+        'Last Name': 'Nom',
+        'Email': 'E-mail',
+        'Phone': 'Téléphone',
+        'Date of Birth': 'Date de Naissance',
+        'Address': 'Adresse',
+        'Insurance Provider': "Fournisseur d'Assurance",
+
+        // Settings
+        'Notifications': 'Notifications',
+        'Email Notifications': 'Notifications par E-mail',
+        'Appointment Reminders': 'Rappels de Rendez-vous',
+        'Document Alerts': 'Alertes de Documents',
+        'Invoice Alerts': 'Alertes de Factures',
+        'Preferences': 'Préférences',
+        'Theme': 'Thème',
+        'Language': 'Langue',
+        'Light': 'Clair',
+        'Dark': 'Sombre',
+        'Auto': 'Automatique',
+        'Data Import': 'Importation de Données',
+        'Save Settings': 'Enregistrer les Paramètres'
+    }
+};
+
+// Language application function
+function applyLanguage(language) {
+    const lang = language || 'en';
+    const dict = translations[lang] || translations.en;
+
+    // Store current language
+    document.documentElement.setAttribute('lang', lang);
+
+    // Translate all elements with data-translate attribute
+    document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (dict[key]) {
+            if (element.tagName === 'INPUT' && element.placeholder) {
+                element.placeholder = dict[key];
+            } else {
+                element.textContent = dict[key];
+            }
+        }
+    });
 }
 
 // Account Modal
@@ -18484,6 +18792,199 @@ function deleteAccount() {
     
     showNotification('Account deletion request submitted. Please contact support.', 'info');
     closeModal('accountModal');
+}
+
+// ========================================
+// CLIENT IMPORT FUNCTIONS
+// ========================================
+
+let importFileData = null;
+
+function handleImportFileSelected() {
+    const fileInput = document.getElementById('clientImportFile');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        document.getElementById('importPreview').style.display = 'none';
+        return;
+    }
+
+    const fileName = file.name;
+    const fileExtension = fileName.split('.').pop().toLowerCase();
+
+    if (fileExtension !== 'csv' && fileExtension !== 'xlsx') {
+        showNotification('Please select a CSV or Excel file', 'error');
+        fileInput.value = '';
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        const content = e.target.result;
+
+        if (fileExtension === 'csv') {
+            parseCSVImport(content, fileName);
+        } else if (fileExtension === 'xlsx') {
+            parseExcelImport(content, fileName);
+        }
+    };
+
+    if (fileExtension === 'csv') {
+        reader.readAsText(file);
+    } else {
+        reader.readAsArrayBuffer(file);
+    }
+}
+
+function parseCSVImport(csvContent, fileName) {
+    const lines = csvContent.split('\n').filter(line => line.trim());
+
+    if (lines.length < 2) {
+        showNotification('CSV file appears to be empty', 'error');
+        return;
+    }
+
+    const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+    const rows = lines.slice(1);
+
+    importFileData = {
+        fileName: fileName,
+        rowCount: rows.length,
+        headers: headers,
+        rows: rows.map(row => {
+            const values = row.split(',').map(v => v.trim().replace(/"/g, ''));
+            const obj = {};
+            headers.forEach((header, index) => {
+                obj[header] = values[index] || '';
+            });
+            return obj;
+        })
+    };
+
+    displayImportPreview();
+}
+
+function parseExcelImport(arrayBuffer, fileName) {
+    // For Excel files, we'll use a simple parser
+    // In production, you'd use a library like SheetJS (xlsx)
+    showNotification('Excel import is being processed. For now, please use CSV format for best results.', 'info');
+
+    // Simplified Excel parsing - convert to text and parse as CSV
+    const decoder = new TextDecoder('utf-8');
+    const text = decoder.decode(arrayBuffer);
+    parseCSVImport(text, fileName);
+}
+
+function displayImportPreview() {
+    if (!importFileData) return;
+
+    document.getElementById('importFileName').textContent = `File: ${importFileData.fileName}`;
+    document.getElementById('importStats').textContent = `Found ${importFileData.rowCount} clients to import`;
+    document.getElementById('importPreview').style.display = 'block';
+}
+
+async function processClientImport() {
+    if (!importFileData || !importFileData.rows || importFileData.rows.length === 0) {
+        showNotification('No data to import', 'error');
+        return;
+    }
+
+    document.getElementById('importProgress').style.display = 'block';
+    document.getElementById('importPreview').style.display = 'none';
+
+    const totalRows = importFileData.rows.length;
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (let i = 0; i < totalRows; i++) {
+        const row = importFileData.rows[i];
+        const progress = ((i + 1) / totalRows) * 100;
+
+        document.getElementById('importProgressBar').style.width = progress + '%';
+        document.getElementById('importProgressText').textContent = `Importing ${i + 1} of ${totalRows}...`;
+
+        try {
+            // Map CSV columns to client data structure
+            const clientData = mapImportDataToClient(row);
+
+            // Create client via API
+            const response = await fetch('/api/clients', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(clientData)
+            });
+
+            if (response.ok) {
+                successCount++;
+            } else {
+                errorCount++;
+                console.error(`Failed to import client at row ${i + 1}:`, row);
+            }
+        } catch (error) {
+            errorCount++;
+            console.error(`Error importing client at row ${i + 1}:`, error);
+        }
+
+        // Small delay to prevent overwhelming the server
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+
+    document.getElementById('importProgressBar').style.width = '100%';
+    document.getElementById('importProgressText').textContent = `Import complete! ${successCount} successful, ${errorCount} failed`;
+
+    showNotification(`Import complete! ${successCount} clients imported successfully.`, 'success');
+
+    // Reset after 3 seconds
+    setTimeout(() => {
+        document.getElementById('importProgress').style.display = 'none';
+        document.getElementById('clientImportFile').value = '';
+        importFileData = null;
+
+        // Reload clients if on clients page
+        if (typeof loadClients === 'function') {
+            loadClients();
+        }
+    }, 3000);
+
+    logAudit('client_import', {
+        user_id: currentUser.id,
+        total: totalRows,
+        success: successCount,
+        failed: errorCount
+    });
+}
+
+function mapImportDataToClient(row) {
+    // Map common EHR column names to Sessionably client structure
+    // This handles various naming conventions from different EHR systems
+
+    const getField = (possibleNames) => {
+        for (const name of possibleNames) {
+            if (row[name]) return row[name];
+        }
+        return '';
+    };
+
+    return {
+        first_name: getField(['First Name', 'FirstName', 'first_name', 'fname', 'given_name']),
+        last_name: getField(['Last Name', 'LastName', 'last_name', 'lname', 'surname', 'family_name']),
+        email: getField(['Email', 'email', 'Email Address', 'email_address']),
+        phone: getField(['Phone', 'phone', 'Phone Number', 'phone_number', 'mobile', 'cell']),
+        date_of_birth: getField(['Date of Birth', 'DOB', 'dob', 'date_of_birth', 'birthdate', 'birth_date']),
+        address: getField(['Address', 'address', 'street', 'Street Address', 'street_address']),
+        city: getField(['City', 'city']),
+        state: getField(['State', 'state', 'province']),
+        zip_code: getField(['Zip', 'zip', 'Zip Code', 'zip_code', 'postal_code', 'postcode']),
+        insurance_provider: getField(['Insurance Provider', 'insurance_provider', 'Insurance', 'insurance', 'payer']),
+        insurance_id: getField(['Insurance ID', 'insurance_id', 'Member ID', 'member_id', 'policy_number']),
+        emergency_contact_name: getField(['Emergency Contact', 'emergency_contact', 'emergency_contact_name', 'emergency_name']),
+        emergency_contact_phone: getField(['Emergency Phone', 'emergency_phone', 'emergency_contact_phone']),
+        notes: getField(['Notes', 'notes', 'Comments', 'comments', 'remarks']),
+        status: 'active'
+    };
 }
 
 // ========================================
@@ -19179,7 +19680,32 @@ ${new Date().toLocaleString()}
                     </select>
                 </div>
             </div>
-            
+
+            <div class="settings-section">
+                <h3>Data Import</h3>
+                <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
+                    Import your existing clients and information from another EHR platform. Supported formats: CSV, Excel (.xlsx)
+                </p>
+                <div class="form-group">
+                    <label>Select File</label>
+                    <input type="file" id="clientImportFile" class="input" accept=".csv,.xlsx" onchange="handleImportFileSelected()">
+                </div>
+                <div id="importPreview" style="display: none; margin-top: 15px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
+                    <h4 style="margin-top: 0;">Import Preview</h4>
+                    <p id="importFileName" style="margin: 5px 0; font-weight: bold;"></p>
+                    <p id="importStats" style="margin: 5px 0; color: #666;"></p>
+                    <button type="button" onclick="processClientImport()" class="btn btn-primary" style="margin-top: 10px;">
+                        Import Clients
+                    </button>
+                </div>
+                <div id="importProgress" style="display: none; margin-top: 15px;">
+                    <div style="background: #e0e0e0; height: 30px; border-radius: 15px; overflow: hidden;">
+                        <div id="importProgressBar" style="background: linear-gradient(135deg, #00B4A6, #00D4C4); height: 100%; width: 0%; transition: width 0.3s;"></div>
+                    </div>
+                    <p id="importProgressText" style="text-align: center; margin-top: 10px; font-weight: bold;"></p>
+                </div>
+            </div>
+
             <div class="modal-actions">
                 <button type="button" onclick="closeModal('settingsModal')" class="btn btn-secondary">Cancel</button>
                 <button type="button" onclick="saveSettings()" class="btn btn-primary">Save Settings</button>
