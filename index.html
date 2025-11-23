@@ -135,6 +135,7 @@
         .btn-primary {
             background: var(--primary-color);
             color: white;
+            font-weight: 600;
         }
 
         .btn-primary:hover {
@@ -144,9 +145,10 @@
         }
 
         .btn-secondary {
-            background: transparent;
+            background: white;
             color: var(--primary-color);
             border: 2px solid var(--primary-color);
+            font-weight: 600;
         }
 
         .btn-secondary:hover {
@@ -163,7 +165,7 @@
         }
 
         .hero h1 {
-            font-size: 80px;
+            font-size: 64px;
             font-weight: 800;
             margin-bottom: 1.5rem;
             color: var(--text-primary);
@@ -187,6 +189,19 @@
         .btn-large {
             padding: 1rem 2rem;
             font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .btn-white:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
         }
 
         /* Clinician Built Badge */
@@ -673,7 +688,7 @@
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 48px;
+                font-size: 38px;
             }
 
             .hero p {
@@ -1166,7 +1181,7 @@
     <header class="header">
         <div class="header-content">
             <a href="/" class="logo" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
-                <img src="/public/assets/logos/sessionably-logo.svg" alt="Sessionably - Practice Management Suite" style="height: 40px; width: auto;">
+                <img src="/public/assets/logos/sessionably-logo.svg" alt="Sessionably - Practice Management Suite" style="height: 60px; width: auto;">
             </a>
             <div class="nav-buttons">
                 <a href="#features" class="btn btn-secondary">Features</a>
