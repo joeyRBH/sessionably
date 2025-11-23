@@ -1,0 +1,8 @@
+<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Two overlapping circles representing connection and balance -->
+  <!-- Left circle - Primary teal -->
+  <circle cx="30" cy="40" r="24" fill="#00B4A6" opacity="0.9"/>
+  <!-- Right circle - Accent orange -->
+  <circle cx="50" cy="40" r="24" fill="#F4A443" opacity="0.9"/>
+  <!-- Overlap creates visual harmony -->
+</svg>
