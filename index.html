@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="dns-prefetch" href="https://js.stripe.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
     <style>
         
         :root {
@@ -1026,61 +1027,10 @@
             <h2 class="section-title">Start at $40. Scale at Your Pace.</h2>
             <p class="section-subtitle">No surprise fees. No contracts. No guilt trips when you cancel. (But you won't want to.)</p>
 
-            <div class="pricing-grid">
-                <!-- Essential Tier -->
-                <div class="pricing-card">
-                    <div class="pricing-tier">Essential EHR</div>
-                    <div class="pricing-price">$40</div>
-                    <div class="pricing-period">per month</div>
-                    <div class="pricing-description">Perfect for getting started</div>
-                    <ul class="pricing-features">
-                        <li>Client management</li>
-                        <li>Appointment scheduling</li>
-                        <li>Billing & invoicing</li>
-                        <li>Clinical notes (manual)</li>
-                        <li>Automated client notifications</li>
-                        <li>Client portal</li>
-                        <li>Document storage</li>
-                        <li>Digital signatures</li>
-                        <li>HIPAA compliant</li>
-                    </ul>
-                    <a href="#signup" class="btn btn-white btn-large" onclick="openSignupModal(event, 'essential')">Start Free Trial</a>
-                </div>
-
-                <!-- Professional Tier (Popular) -->
-                <div class="pricing-card popular">
-                    <div class="popular-badge">⭐ Most Popular</div>
-                    <div class="pricing-tier">Professional</div>
-                    <div class="pricing-price">$60</div>
-                    <div class="pricing-period">per month</div>
-                    <div class="pricing-description">Add powerful features to your practice</div>
-                    <ul class="pricing-features">
-                        <li>Everything in Essential</li>
-                        <li style="font-weight: 600; opacity: 1;">Choose one add-on:</li>
-                        <li style="padding-left: 1.5rem;">• Telehealth video sessions, OR</li>
-                        <li style="padding-left: 1.5rem;">• AI-powered clinical notes</li>
-                        <li>Perfect for growing practices</li>
-                    </ul>
-                    <a href="#signup" class="btn btn-white btn-large" onclick="openSignupModal(event, 'professional')">Start Free Trial</a>
-                </div>
-
-                <!-- Complete Tier -->
-                <div class="pricing-card">
-                    <div class="pricing-tier">Complete Suite</div>
-                    <div class="pricing-price">$80</div>
-                    <div class="pricing-period">per month</div>
-                    <div class="pricing-description">The complete platform</div>
-                    <ul class="pricing-features">
-                        <li>Everything in Professional</li>
-                        <li style="font-weight: 600; opacity: 1;">Telehealth video sessions</li>
-                        <li style="font-weight: 600; opacity: 1;">AI-powered clinical notes</li>
-                        <li>Priority support</li>
-                        <li>Save $5/month</li>
-                        <li style="opacity: 0.8; font-size: 0.85rem;">23% less than SimplePractice + AI</li>
-                    </ul>
-                    <a href="#signup" class="btn btn-white btn-large" onclick="openSignupModal(event, 'complete')">Start Free Trial</a>
-                </div>
-            </div>
+            <!-- Stripe Pricing Table -->
+            <stripe-pricing-table pricing-table-id="prctbl_1SX4sA3acP2PN3DDoKRjYZsx"
+            publishable-key="pk_live_51SJ5Q33acP2PN3DDzxe38FSvitjiFiMTijiznVmrMtxQ3FXBKSqdHzBY5OnvRZ7CgRpQS3KlX817TthhFFx5AEEH00jbEPbLTn">
+            </stripe-pricing-table>
 
             <p style="margin-top: 3rem; opacity: 0.8; font-size: 1rem;">
                 All plans include unlimited clients, HIPAA compliance, and secure data storage.
