@@ -225,6 +225,78 @@
             width: auto;
         }
 
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            height: 50px;
+            width: auto;
+        }
+
+        .logo-text-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .logo-wordmark {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .logo-tagline {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 9px;
+            font-weight: 400;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            line-height: 1;
+        }
+
+        .auth-container .logo-container {
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .auth-container .logo-icon {
+            height: 40px;
+        }
+
+        .auth-container .logo-wordmark {
+            font-size: 20px;
+        }
+
+        .auth-container .logo-tagline {
+            font-size: 8px;
+        }
+
+        .header h1 .logo-container {
+            gap: 12px;
+        }
+
+        .header h1 .logo-icon {
+            height: 35px;
+        }
+
+        .header h1 .logo-wordmark {
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+
+        .header h1 .logo-tagline {
+            font-size: 7px;
+        }
+
         .header-actions {
             display: flex;
             align-items: center;
@@ -4387,8 +4459,17 @@
 </head>
 <body>
     <div class="auth-container" id="authContainer">
-        <div style="text-align: center; margin-bottom: 24px;">
-            <img src="/public/assets/logos/sessionably-logo.svg" alt="Sessionably - Practice Management Suite" style="height: 60px; width: auto; margin: 0 auto;">
+        <div class="logo-container">
+            <!-- SVG Logo Icon -->
+            <svg class="logo-icon" viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="35" r="26" fill="none" stroke="#00B4A6" stroke-width="4"/>
+                <circle cx="68" cy="35" r="26" fill="none" stroke="#F4A443" stroke-width="4"/>
+            </svg>
+            <!-- Logo Text with Tagline -->
+            <div class="logo-text-container">
+                <div class="logo-wordmark">SESSIONABLY</div>
+                <div class="logo-tagline">PRACTICE MANAGEMENT SUITE</div>
+            </div>
         </div>
 
         <div class="auth-tabs">
@@ -4453,7 +4534,18 @@
                     ☰
                 </button>
                 <h1>
-                    <img src="/public/assets/logos/sessionably-logo.svg" alt="Sessionably - Practice Management Suite" class="logo">
+                    <div class="logo-container">
+                        <!-- SVG Logo Icon -->
+                        <svg class="logo-icon" viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="32" cy="35" r="26" fill="none" stroke="#00B4A6" stroke-width="4"/>
+                            <circle cx="68" cy="35" r="26" fill="none" stroke="#F4A443" stroke-width="4"/>
+                        </svg>
+                        <!-- Logo Text with Tagline -->
+                        <div class="logo-text-container">
+                            <div class="logo-wordmark">SESSIONABLY</div>
+                            <div class="logo-tagline">PRACTICE MANAGEMENT SUITE</div>
+                        </div>
+                    </div>
                 </h1>
             </div>
             <div class="header-actions">
@@ -5026,12 +5118,6 @@
                             <h3>Top Clients</h3>
                             <div id="analyticsTopClientsList"></div>
                         </div>
-                    </div>
-                    <div class="card" style="padding: 24px; margin-top: 20px; background: #fef3c7; border-left: 4px solid #f59e0b;">
-                        <h4 style="margin: 0 0 10px 0; color: #92400e;">Enhanced Analytics Coming Soon</h4>
-                        <p style="margin: 0; color: #78350f;">
-                            This Analytics tab will be enhanced with additional features similar to SimplePractice's analytics capabilities in future updates.
-                        </p>
                     </div>
                 </div>
             </div>
