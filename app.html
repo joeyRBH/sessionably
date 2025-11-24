@@ -14,6 +14,13 @@
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Kalam:wght@300;400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Kalam:wght@300;400;700&display=swap" rel="stylesheet"></noscript>
     <script src="https://js.stripe.com/v3/" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Configure PDF.js worker
+        if (typeof pdfjsLib !== 'undefined') {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+    </script>
     <style>
         
         :root {
@@ -18898,8 +18905,8 @@ function handleImportFileSelected() {
     const fileName = file.name;
     const fileExtension = fileName.split('.').pop().toLowerCase();
 
-    if (fileExtension !== 'csv' && fileExtension !== 'xlsx') {
-        showNotification('Please select a CSV or Excel file', 'error');
+    if (fileExtension !== 'csv' && fileExtension !== 'xlsx' && fileExtension !== 'pdf') {
+        showNotification('Please select a CSV, Excel, or PDF file', 'error');
         fileInput.value = '';
         return;
     }
@@ -18913,6 +18920,8 @@ function handleImportFileSelected() {
             parseCSVImport(content, fileName);
         } else if (fileExtension === 'xlsx') {
             parseExcelImport(content, fileName);
+        } else if (fileExtension === 'pdf') {
+            parsePDFImport(content, fileName);
         }
     };
 
@@ -18960,6 +18969,159 @@ function parseExcelImport(arrayBuffer, fileName) {
     const decoder = new TextDecoder('utf-8');
     const text = decoder.decode(arrayBuffer);
     parseCSVImport(text, fileName);
+}
+
+async function parsePDFImport(arrayBuffer, fileName) {
+    try {
+        showNotification('Processing PDF file...', 'info');
+
+        // Load the PDF document
+        const loadingTask = pdfjsLib.getDocument({data: arrayBuffer});
+        const pdf = await loadingTask.promise;
+
+        // Extract text from all pages
+        let fullText = '';
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map(item => item.str).join(' ');
+            fullText += pageText + '\n';
+        }
+
+        // Parse the extracted text
+        const lines = fullText.split('\n').filter(line => line.trim());
+
+        if (lines.length < 2) {
+            showNotification('PDF appears to be empty or contains no readable text', 'error');
+            return;
+        }
+
+        // Try to detect if this is a tabular format
+        // Look for common headers
+        const possibleHeaderLine = lines.findIndex(line => {
+            const lowerLine = line.toLowerCase();
+            return (lowerLine.includes('name') || lowerLine.includes('email') ||
+                    lowerLine.includes('phone') || lowerLine.includes('client'));
+        });
+
+        let headers = [];
+        let dataLines = [];
+
+        if (possibleHeaderLine !== -1) {
+            // Found a header line - try to parse as tabular data
+            const headerLine = lines[possibleHeaderLine];
+
+            // Try to split by common delimiters (tabs, multiple spaces, pipes)
+            if (headerLine.includes('\t')) {
+                headers = headerLine.split('\t').map(h => h.trim()).filter(h => h);
+            } else if (headerLine.includes('|')) {
+                headers = headerLine.split('|').map(h => h.trim()).filter(h => h);
+            } else if (headerLine.match(/\s{2,}/)) {
+                headers = headerLine.split(/\s{2,}/).map(h => h.trim()).filter(h => h);
+            } else {
+                // Fallback: try to identify column positions by looking for words
+                headers = headerLine.match(/[A-Za-z][\w\s]*(?=[A-Z]|$)/g) || [headerLine];
+                headers = headers.map(h => h.trim()).filter(h => h);
+            }
+
+            // Get data lines after the header
+            dataLines = lines.slice(possibleHeaderLine + 1);
+        } else {
+            // No clear header found - try to extract structured data
+            // Look for patterns like "Name: John Doe", "Email: john@example.com"
+            const clientData = [];
+            let currentClient = {};
+
+            for (const line of lines) {
+                // Match patterns like "Field: Value" or "Field Value"
+                const colonMatch = line.match(/^([A-Za-z\s]+):\s*(.+)$/);
+                const labelMatch = line.match(/^([A-Za-z\s]+)\s{2,}(.+)$/);
+
+                if (colonMatch) {
+                    const [, field, value] = colonMatch;
+                    const fieldName = field.trim();
+                    currentClient[fieldName] = value.trim();
+
+                    // If we see a name field, it might be a new client
+                    if (fieldName.toLowerCase().includes('name') && Object.keys(currentClient).length > 1) {
+                        clientData.push({...currentClient});
+                        currentClient = {[fieldName]: value.trim()};
+                    }
+                } else if (labelMatch) {
+                    const [, field, value] = labelMatch;
+                    currentClient[field.trim()] = value.trim();
+                }
+            }
+
+            // Add the last client if any
+            if (Object.keys(currentClient).length > 0) {
+                clientData.push(currentClient);
+            }
+
+            // Convert to headers and rows format
+            if (clientData.length > 0) {
+                headers = Object.keys(clientData[0]);
+                importFileData = {
+                    fileName: fileName,
+                    rowCount: clientData.length,
+                    headers: headers,
+                    rows: clientData
+                };
+                displayImportPreview();
+                return;
+            }
+
+            // Last resort: try CSV parsing on the text
+            parseCSVImport(fullText, fileName);
+            return;
+        }
+
+        // Parse data lines using the same delimiter detection as headers
+        const rows = dataLines.map(line => {
+            let values = [];
+
+            if (line.includes('\t')) {
+                values = line.split('\t').map(v => v.trim());
+            } else if (line.includes('|')) {
+                values = line.split('|').map(v => v.trim());
+            } else if (line.match(/\s{2,}/)) {
+                values = line.split(/\s{2,}/).map(v => v.trim());
+            } else {
+                // Try to match the header positions
+                values = line.match(/[^\s]+(?:\s+[^\s]+)*/g) || [line];
+                values = values.map(v => v.trim());
+            }
+
+            // Create object mapping headers to values
+            const obj = {};
+            headers.forEach((header, index) => {
+                obj[header] = values[index] || '';
+            });
+            return obj;
+        }).filter(row => {
+            // Filter out empty rows or rows that are likely table separators
+            const hasData = Object.values(row).some(val => val && val.length > 0 && !val.match(/^[-_=]+$/));
+            return hasData;
+        });
+
+        if (rows.length === 0) {
+            showNotification('Could not extract client data from PDF. Please ensure the PDF contains structured data.', 'error');
+            return;
+        }
+
+        importFileData = {
+            fileName: fileName,
+            rowCount: rows.length,
+            headers: headers,
+            rows: rows
+        };
+
+        displayImportPreview();
+
+    } catch (error) {
+        console.error('PDF parsing error:', error);
+        showNotification('Error parsing PDF file: ' + error.message, 'error');
+    }
 }
 
 function displayImportPreview() {
@@ -19770,11 +19932,11 @@ ${new Date().toLocaleString()}
             <div class="settings-section">
                 <h3>Data Import</h3>
                 <p style="color: #666; font-size: 14px; margin-bottom: 15px;">
-                    Import your existing clients and information from another EHR platform. Supported formats: CSV, Excel (.xlsx)
+                    Import your existing clients and information from another EHR platform. Supported formats: CSV, Excel (.xlsx), PDF
                 </p>
                 <div class="form-group">
                     <label>Select File</label>
-                    <input type="file" id="clientImportFile" class="input" accept=".csv,.xlsx" onchange="handleImportFileSelected()">
+                    <input type="file" id="clientImportFile" class="input" accept=".csv,.xlsx,.pdf" onchange="handleImportFileSelected()">
                 </div>
                 <div id="importPreview" style="display: none; margin-top: 15px; padding: 15px; background: #f5f5f5; border-radius: 8px;">
                     <h4 style="margin-top: 0;">Import Preview</h4>
