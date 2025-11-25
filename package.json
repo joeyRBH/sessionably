@@ -28,5 +28,8 @@
     "hipaa"
   ],
   "author": "Joey Holub",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "sharp": "^0.34.5"
+  }
 }
