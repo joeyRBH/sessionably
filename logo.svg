@@ -1,0 +1,11 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Navy background -->
+  <rect width="512" height="512" fill="#1A1A2E"/>
+
+  <!-- Interlocking circles -->
+  <!-- Teal circle (left) -->
+  <circle cx="200" cy="256" r="140" fill="none" stroke="#00B4A6" stroke-width="28"/>
+
+  <!-- Orange/Amber circle (right) -->
+  <circle cx="312" cy="256" r="140" fill="none" stroke="#F4A443" stroke-width="28"/>
+</svg>
