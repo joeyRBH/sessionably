@@ -4510,12 +4510,12 @@
                     <label for="rememberMe" style="cursor: pointer; color: var(--text-primary);">Remember me for 30 days</label>
                 </div>
                 
-                <button onclick="clinicianLogin()" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 18px; background: #3498db; border: none; border-radius: 8px; color: white; cursor: pointer;">
+                <button onclick="clinicianLogin()" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 18px; background: #00b4a6; border: none; border-radius: 8px; color: white; cursor: pointer;">
                     ▸ Login
                 </button>
 
                 <div style="margin-top: 15px; text-align: center;">
-                    <a href="#" onclick="showRegisterForm(); return false;" style="color: #3498db; text-decoration: none; font-size: 14px;">
+                    <a href="#" onclick="showRegisterForm(); return false;" style="color: #00b4a6; text-decoration: none; font-size: 14px;">
                         Don't have an account? Register here
                     </a>
                 </div>
@@ -5236,7 +5236,7 @@
                             <button onclick="bulkDisableAutopay()" class="btn btn-secondary">Disable Selected</button>
                         </div>
 
-                        <div style="margin-bottom: 15px; padding: 12px; background: #e8f4f8; border-radius: 8px; border-left: 4px solid #3498db;">
+                        <div style="margin-bottom: 15px; padding: 12px; background: #e8f4f8; border-radius: 8px; border-left: 4px solid #00b4a6;">
                             <strong>Note:</strong> Auto-pay will automatically charge the client's default payment method when an invoice is created. Clients without a saved payment method cannot have auto-pay enabled.
                         </div>
 
@@ -12754,7 +12754,7 @@ function renderDocs() {
     let html = '';
 
     // Section 1: Clinical Document Templates
-    html += '<div class="card" style="margin-bottom: 20px;"><h3 style="color: #3498db;">📚 Clinical Document Templates</h3>';
+    html += '<div class="card" style="margin-bottom: 20px;"><h3 style="color: #00b4a6;">📚 Clinical Document Templates</h3>';
     html += '<p style="color: #666; font-size: 14px; margin-bottom: 15px;">All available clinical documents that can be shared with clients</p>';
 
     if (Object.keys(documentTemplates).length > 0) {
@@ -12770,7 +12770,7 @@ function renderDocs() {
                      onmouseout="this.style.boxShadow='none'">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
                         <h4 style="margin: 0; color: #2c3e50; font-size: 16px; flex: 1;">${template.name}</h4>
-                        ${assignedCount > 0 ? `<span style="background: #3498db; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-left: 10px;">${assignedCount}</span>` : ''}
+                        ${assignedCount > 0 ? `<span style="background: #00b4a6; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; margin-left: 10px;">${assignedCount}</span>` : ''}
                     </div>
                     <p style="color: #666; font-size: 13px; margin: 8px 0;">Template ID: ${id}</p>
                     <button onclick="quickAssignDoc('${id}')" class="btn btn-secondary" style="font-size: 13px; padding: 6px 12px; width: 100%; margin-top: 10px;">

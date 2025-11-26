@@ -143,7 +143,7 @@ export default async function handler(req, res) {
             <li>Manage notification preferences</li>
             <li>Send secure messages to your provider</li>
           </ul>
-          <p><a href="${portalLink}" style="background-color: #3498db; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Access Client Portal</a></p>
+          <p><a href="${portalLink}" style="background-color: #00b4a6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; display: inline-block;">Access Client Portal</a></p>
           <p>Login with your email: <strong>${email}</strong></p>
           <p>If you have any questions, please contact your provider.</p>
         `,
