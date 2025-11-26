@@ -4470,6 +4470,10 @@
     <!-- Fortune Bright Theme - Professional Healthcare Design -->
     <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="fortune-bright-theme.css">
+
+    <!-- Subscription Management -->
+    <script src="/utils/subscription-plans.js"></script>
+    <script src="/utils/feature-gate.js"></script>
 </head>
 <body>
     <div class="auth-container" id="authContainer">
@@ -5415,55 +5419,123 @@
                 </div>
 
                 <div id="subscriptionSettingsTab" class="settings-tab-content" style="display: none;">
+                    <!-- Current Plan Card -->
                     <div class="card">
-                        <h3>Base Subscription</h3>
-                        <div id="subscriptionStatusCard" class="subscription-status-card">
-                            <!-- Subscription status will be loaded here -->
-                        </div>
-
-                        <div id="subscriptionActions" class="subscription-actions" style="margin-top: 20px;">
-                            <!-- Subscription actions will be loaded here -->
+                        <h3>Current Subscription Plan</h3>
+                        <div id="currentPlanCard" style="padding: 20px; background: var(--primary-subtle); border-radius: 12px; margin: 15px 0;">
+                            <!-- Dynamically loaded current plan info -->
                         </div>
                     </div>
 
+                    <!-- Professional Plan Addon Selection (shown only for Professional users) -->
+                    <div id="professionalAddonSection" class="card" style="margin-top: 30px; display: none;">
+                        <h3>Professional Plan Add-on</h3>
+                        <p class="settings-description">Choose ONE premium feature included with your Professional plan:</p>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                            <!-- AI Notes Addon Card -->
+                            <div id="aiNotesAddonCard" class="addon-selection-card" onclick="selectProfessionalAddon('ai_notes')"
+                                 style="border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                                <h4 style="margin: 0 0 10px 0;">🤖 AI NoteTaker</h4>
+                                <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 15px 0;">
+                                    AI-powered clinical note generation with real-time transcription
+                                </p>
+                                <ul style="margin: 0 0 15px 20px; color: var(--text-secondary); font-size: 13px;">
+                                    <li>Real-time transcription</li>
+                                    <li>Multiple note formats</li>
+                                    <li>Automated documentation</li>
+                                </ul>
+                                <div id="aiNotesAddonStatus"></div>
+                            </div>
+
+                            <!-- Telehealth Addon Card -->
+                            <div id="telehealthAddonCard" class="addon-selection-card" onclick="selectProfessionalAddon('telehealth')"
+                                 style="border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; cursor: pointer; transition: all 0.2s;">
+                                <h4 style="margin: 0 0 10px 0;">📹 Telehealth</h4>
+                                <p style="color: var(--text-secondary); font-size: 14px; margin: 0 0 15px 0;">
+                                    Integrated video sessions directly in the platform
+                                </p>
+                                <ul style="margin: 0 0 15px 20px; color: var(--text-secondary); font-size: 13px;">
+                                    <li>Secure video calls</li>
+                                    <li>HIPAA-compliant</li>
+                                    <li>Seamless scheduling</li>
+                                </ul>
+                                <div id="telehealthAddonStatus"></div>
+                            </div>
+                        </div>
+
+                        <p style="color: var(--text-secondary); font-size: 13px; margin-top: 15px;">
+                            * You can change your addon once per billing cycle. To get both features, upgrade to Complete Suite.
+                        </p>
+                    </div>
+
+                    <!-- Upgrade Options Card -->
                     <div class="card" style="margin-top: 30px;">
-                        <h3>Add-On Features</h3>
-                        <p class="settings-description">Enhance your EHR with optional premium features.</p>
+                        <h3>Subscription Plans</h3>
+                        <p class="settings-description">Compare plans and upgrade anytime:</p>
 
-                        <div id="aiNoteTakerAddon" class="addon-card" style="border: 2px solid var(--border-color); border-radius: 12px; padding: 20px; margin-top: 15px;">
-                            <div style="display: flex; justify-content: space-between; align-items: start;">
-                                <div style="flex: 1;">
-                                    <h4 style="margin: 0 0 10px 0; display: flex; align-items: center; gap: 10px;">
-                                        ● AI NoteTaker
-                                        <span id="aiNoteTakerBadge" class="status-badge" style="font-size: 12px;">Not Active</span>
-                                    </h4>
-                                    <p style="color: var(--text-secondary); margin: 0 0 15px 0;">
-                                        Advanced AI-powered session recording and clinical note generation. Automatically transcribe sessions and generate structured clinical notes in multiple formats (DAP, SOAP, BIRP, Narrative).
-                                    </p>
-                                    <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
-                                        <div style="font-size: 18px; font-weight: 600; color: var(--primary-color);">$20/month</div>
-                                        <div style="font-size: 13px; color: var(--text-secondary);">Per clinician account</div>
-                                    </div>
-                                    <ul style="margin: 0 0 15px 20px; color: var(--text-secondary); font-size: 14px;">
-                                        <li>Real-time session transcription</li>
-                                        <li>AI-generated clinical notes</li>
-                                        <li>Multiple note format support</li>
-                                        <li>7-day automatic transcript retention</li>
-                                        <li>HIPAA-compliant secure storage</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div id="aiNoteTakerActions">
-                                <button id="subscribeAINoteTakerBtn" class="btn btn-primary" onclick="subscribeToAINoteTaker()">
-                                    Subscribe to AI NoteTaker
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
+                            <!-- Essential Plan -->
+                            <div class="plan-card" style="border: 2px solid var(--border-color); border-radius: 12px; padding: 20px;">
+                                <h4 style="margin: 0 0 10px 0;">Essential</h4>
+                                <div style="font-size: 32px; font-weight: 700; color: var(--primary-color); margin: 10px 0;">$40</div>
+                                <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px;">/month</div>
+                                <ul style="margin: 0 0 20px 20px; color: var(--text-secondary); font-size: 13px; list-style: none;">
+                                    <li style="margin: 8px 0;">✓ Client management</li>
+                                    <li style="margin: 8px 0;">✓ Scheduling</li>
+                                    <li style="margin: 8px 0;">✓ Billing & invoicing</li>
+                                    <li style="margin: 8px 0;">✓ Manual notes</li>
+                                    <li style="margin: 8px 0;">✓ 50GB storage</li>
+                                    <li style="margin: 8px 0; opacity: 0.5;">✗ AI Notes</li>
+                                    <li style="margin: 8px 0; opacity: 0.5;">✗ Telehealth</li>
+                                </ul>
+                                <button id="essentialPlanBtn" class="btn btn-secondary" onclick="changePlan('essential')" style="width: 100%;">
+                                    Current Plan
                                 </button>
-                                <button id="unsubscribeAINoteTakerBtn" class="btn btn-secondary" onclick="unsubscribeFromAINoteTaker()" style="display: none; margin-left: 10px;">
-                                    Cancel AI NoteTaker
+                            </div>
+
+                            <!-- Professional Plan -->
+                            <div class="plan-card" style="border: 2px solid var(--primary-color); border-radius: 12px; padding: 20px; position: relative;">
+                                <div style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--success-color); color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700;">
+                                    MOST POPULAR
+                                </div>
+                                <h4 style="margin: 0 0 10px 0;">Professional</h4>
+                                <div style="font-size: 32px; font-weight: 700; color: var(--primary-color); margin: 10px 0;">$60</div>
+                                <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px;">/month</div>
+                                <ul style="margin: 0 0 20px 20px; color: var(--text-secondary); font-size: 13px; list-style: none;">
+                                    <li style="margin: 8px 0;">✓ Everything in Essential</li>
+                                    <li style="margin: 8px 0;">✓ Choose ONE addon:</li>
+                                    <li style="margin: 8px 0; margin-left: 20px;">• AI Notes OR</li>
+                                    <li style="margin: 8px 0; margin-left: 20px;">• Telehealth</li>
+                                    <li style="margin: 8px 0;">✓ 100GB storage</li>
+                                    <li style="margin: 8px 0;">✓ Priority support</li>
+                                </ul>
+                                <button id="professionalPlanBtn" class="btn btn-primary" onclick="changePlan('professional')" style="width: 100%;">
+                                    Upgrade to Professional
+                                </button>
+                            </div>
+
+                            <!-- Complete Suite Plan -->
+                            <div class="plan-card" style="border: 2px solid var(--border-color); border-radius: 12px; padding: 20px;">
+                                <h4 style="margin: 0 0 10px 0;">Complete Suite</h4>
+                                <div style="font-size: 32px; font-weight: 700; color: var(--primary-color); margin: 10px 0;">$80</div>
+                                <div style="color: var(--text-secondary); font-size: 14px; margin-bottom: 15px;">/month</div>
+                                <ul style="margin: 0 0 20px 20px; color: var(--text-secondary); font-size: 13px; list-style: none;">
+                                    <li style="margin: 8px 0;">✓ Everything in Essential</li>
+                                    <li style="margin: 8px 0;">✓ AI Notes (unlimited)</li>
+                                    <li style="margin: 8px 0;">✓ Telehealth (unlimited)</li>
+                                    <li style="margin: 8px 0;">✓ Multi-clinician (5 users)</li>
+                                    <li style="margin: 8px 0;">✓ 250GB storage</li>
+                                    <li style="margin: 8px 0;">✓ Premium support</li>
+                                </ul>
+                                <button id="completePlanBtn" class="btn btn-primary" onclick="changePlan('complete')" style="width: 100%;">
+                                    Upgrade to Complete
                                 </button>
                             </div>
                         </div>
                     </div>
 
+                    <!-- Billing History (keep existing) -->
                     <div class="card" style="margin-top: 30px;">
                         <div id="billingHistory" class="billing-history">
                             <h4>Billing History</h4>
@@ -8727,6 +8799,13 @@ function showTab(tab) {
 
 // AI NoteTaker: Open from appointment context
 function openAINoteTakerFromAppointment(appointmentId, clientId, clientName) {
+    // Check subscription-based feature access
+    const access = window.featureGate.checkFeature('aiClinicalNotes');
+    if (!access.allowed) {
+        window.featureGate.showUpgradePrompt('aiClinicalNotes');
+        return;
+    }
+
     if (!FEATURE_FLAGS.AI_NOTETAKER_ENABLED) {
         showNotification('AI NoteTaker feature is not enabled', 'error');
         return;
@@ -9893,6 +9972,178 @@ function renderBillingHistory(billingHistory) {
     `).join('');
     
     historyContainer.innerHTML = historyHTML;
+}
+
+// NEW: Three-Tier Subscription Management Functions
+function loadSubscriptionSettings() {
+    // Get subscription from helper (uses localStorage)
+    const subscription = window.SubscriptionHelpers?.getCurrentSubscription() || {
+        planId: 'essential',
+        status: 'active',
+        selectedAddon: null
+    };
+    const plan = window.SUBSCRIPTION_PLANS?.[subscription.planId] || window.SUBSCRIPTION_PLANS?.essential;
+
+    // Render current plan card
+    renderCurrentPlanCard(subscription, plan);
+
+    // Show/hide professional addon section
+    if (subscription.planId === 'professional') {
+        document.getElementById('professionalAddonSection').style.display = 'block';
+        renderProfessionalAddonSelection(subscription);
+    } else {
+        document.getElementById('professionalAddonSection').style.display = 'none';
+    }
+
+    // Update plan buttons
+    updatePlanButtons(subscription.planId);
+
+    // Load existing billing history
+    const billingHistory = loadFromStorage('billing_history', []);
+    renderBillingHistory(billingHistory);
+}
+
+function renderCurrentPlanCard(subscription, plan) {
+    const card = document.getElementById('currentPlanCard');
+    const statusBadge = subscription.status === 'active' ?
+        '<span style="background: var(--success-color); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">ACTIVE</span>' :
+        '<span style="background: var(--warning-color); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">INACTIVE</span>';
+
+    let addonInfo = '';
+    if (subscription.planId === 'professional' && subscription.selectedAddon) {
+        const addon = window.ADDONS?.[subscription.selectedAddon];
+        addonInfo = `
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+                <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 5px;">Selected Add-on:</div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--primary-color);">${addon?.icon || ''} ${addon?.name || subscription.selectedAddon}</div>
+            </div>
+        `;
+    } else if (subscription.planId === 'professional' && !subscription.selectedAddon) {
+        addonInfo = `
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color);">
+                <div style="color: var(--warning-color); font-weight: 600;">⚠️ Please select an add-on below</div>
+            </div>
+        `;
+    }
+
+    card.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: start;">
+            <div>
+                <h2 style="margin: 0 0 5px 0; font-size: 28px; color: var(--primary-color);">${plan.name}</h2>
+                <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 10px;">${plan.description}</div>
+                <div style="font-size: 32px; font-weight: 700; color: var(--text-primary);">$${plan.price}<span style="font-size: 16px; font-weight: 400; color: var(--text-secondary);">/month</span></div>
+            </div>
+            <div>
+                ${statusBadge}
+            </div>
+        </div>
+        ${addonInfo}
+    `;
+}
+
+function renderProfessionalAddonSelection(subscription) {
+    const aiNotesCard = document.getElementById('aiNotesAddonCard');
+    const telehealthCard = document.getElementById('telehealthAddonCard');
+    const aiNotesStatus = document.getElementById('aiNotesAddonStatus');
+    const telehealthStatus = document.getElementById('telehealthAddonStatus');
+
+    // Reset styles
+    aiNotesCard.style.border = '2px solid var(--border-color)';
+    telehealthCard.style.border = '2px solid var(--border-color)';
+    aiNotesCard.style.background = 'white';
+    telehealthCard.style.background = 'white';
+
+    // Highlight selected addon
+    if (subscription.selectedAddon === 'ai_notes') {
+        aiNotesCard.style.border = '2px solid var(--primary-color)';
+        aiNotesCard.style.background = 'var(--primary-subtle)';
+        aiNotesStatus.innerHTML = '<span style="color: var(--success-color); font-weight: 600;">✓ Selected</span>';
+        telehealthStatus.innerHTML = '<button class="btn btn-secondary" onclick="selectProfessionalAddon(\'telehealth\')" style="font-size: 13px; padding: 8px 16px;">Switch to this</button>';
+    } else if (subscription.selectedAddon === 'telehealth') {
+        telehealthCard.style.border = '2px solid var(--primary-color)';
+        telehealthCard.style.background = 'var(--primary-subtle)';
+        telehealthStatus.innerHTML = '<span style="color: var(--success-color); font-weight: 600;">✓ Selected</span>';
+        aiNotesStatus.innerHTML = '<button class="btn btn-secondary" onclick="selectProfessionalAddon(\'ai_notes\')" style="font-size: 13px; padding: 8px 16px;">Switch to this</button>';
+    } else {
+        aiNotesStatus.innerHTML = '<button class="btn btn-primary" onclick="selectProfessionalAddon(\'ai_notes\')" style="font-size: 13px; padding: 8px 16px;">Select</button>';
+        telehealthStatus.innerHTML = '<button class="btn btn-primary" onclick="selectProfessionalAddon(\'telehealth\')" style="font-size: 13px; padding: 8px 16px;">Select</button>';
+    }
+}
+
+function updatePlanButtons(currentPlanId) {
+    const essentialBtn = document.getElementById('essentialPlanBtn');
+    const professionalBtn = document.getElementById('professionalPlanBtn');
+    const completeBtn = document.getElementById('completePlanBtn');
+
+    // Reset all buttons
+    essentialBtn.className = 'btn btn-secondary';
+    professionalBtn.className = 'btn btn-primary';
+    completeBtn.className = 'btn btn-primary';
+    essentialBtn.textContent = 'Downgrade';
+    professionalBtn.textContent = 'Upgrade to Professional';
+    completeBtn.textContent = 'Upgrade to Complete';
+    essentialBtn.style.width = '100%';
+    professionalBtn.style.width = '100%';
+    completeBtn.style.width = '100%';
+
+    // Highlight current plan
+    if (currentPlanId === 'essential') {
+        essentialBtn.className = 'btn btn-secondary';
+        essentialBtn.textContent = 'Current Plan';
+        essentialBtn.disabled = true;
+        professionalBtn.textContent = 'Upgrade';
+        completeBtn.textContent = 'Upgrade';
+    } else if (currentPlanId === 'professional') {
+        essentialBtn.textContent = 'Downgrade';
+        professionalBtn.className = 'btn btn-secondary';
+        professionalBtn.textContent = 'Current Plan';
+        professionalBtn.disabled = true;
+        completeBtn.textContent = 'Upgrade';
+    } else if (currentPlanId === 'complete') {
+        essentialBtn.textContent = 'Downgrade';
+        professionalBtn.textContent = 'Downgrade';
+        completeBtn.className = 'btn btn-secondary';
+        completeBtn.textContent = 'Current Plan';
+        completeBtn.disabled = true;
+    }
+}
+
+function selectProfessionalAddon(addonId) {
+    if (window.featureGate) {
+        window.featureGate.selectAddon(addonId);
+    } else {
+        // Fallback if feature gate not loaded
+        window.SubscriptionHelpers.updateSubscription({
+            selectedAddon: addonId,
+            addonSelectedDate: new Date().toISOString()
+        });
+        showNotification('Addon selected successfully!', 'success');
+        loadSubscriptionSettings();
+    }
+}
+
+function changePlan(planId) {
+    const plan = window.SUBSCRIPTION_PLANS?.[planId];
+    if (!plan) {
+        showNotification('Invalid plan selected', 'error');
+        return;
+    }
+
+    if (window.featureGate) {
+        window.featureGate.upgradePlan(planId);
+    } else {
+        // Fallback if feature gate not loaded
+        const confirmed = confirm(`Change to ${plan.name} for $${plan.price}/month?`);
+        if (!confirmed) return;
+
+        window.SubscriptionHelpers.updateSubscription({
+            planId: planId,
+            status: 'active',
+            upgradeDate: new Date().toISOString()
+        });
+        showNotification(`Successfully changed to ${plan.name}!`, 'success');
+        loadSubscriptionSettings();
+    }
 }
 
 // Subscription Actions
@@ -14878,9 +15129,16 @@ function deleteAppointmentFromDetail() {
 }
 
 function generateAINote() {
+    // Check feature access before proceeding
+    const access = window.featureGate.checkFeature('aiClinicalNotes');
+    if (!access.allowed) {
+        window.featureGate.showUpgradePrompt('aiClinicalNotes');
+        return;
+    }
+
     const appointmentId = document.getElementById('appointmentDetailPanel').getAttribute('data-appointment-id');
     const appointment = appointments.find(apt => apt.id == appointmentId);
-    
+
     if (!appointment) {
         showNotification('Appointment not found', 'error');
         return;
@@ -15627,6 +15885,15 @@ async function saveAppointment() {
     const clientName = client ? client.name : 'Unknown Client';
 
     const modality = document.getElementById('appointmentModality').value;
+
+    // Check telehealth feature access
+    if (modality === 'telehealth') {
+        const access = window.featureGate.checkFeature('integratedTelehealth');
+        if (!access.allowed) {
+            window.featureGate.showUpgradePrompt('integratedTelehealth');
+            return;
+        }
+    }
 
     // Determine duration based on CPT code/type
     const appointmentType = document.getElementById('appointmentType').value;
