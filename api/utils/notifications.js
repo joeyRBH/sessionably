@@ -118,7 +118,7 @@ function createHTMLEmail(bodyContent, practiceSettings = {}) {
             border-top: 1px solid #e0e0e0;
         }
         .footer a {
-            color: #3498db;
+            color: #00b4a6;
             text-decoration: none;
         }
     </style>
