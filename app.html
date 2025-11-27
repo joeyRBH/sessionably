@@ -16153,11 +16153,10 @@ async function saveAppointment() {
 
     const appointmentData = {
         client_id: parseInt(clientId),
-        title: document.getElementById('appointmentTitle').value || 'Session',
         appointment_date: appointmentDate,
         appointment_time: appointmentTime,
-        duration_minutes: parseInt(document.getElementById('appointmentDuration').value),
-        appointment_type: document.getElementById('appointmentType').value,
+        duration: parseInt(document.getElementById('appointmentDuration').value),
+        type: document.getElementById('appointmentType').value,
         cpt_code: document.getElementById('appointmentType').value,
         notes: document.getElementById('appointmentNotes').value,
         modality: modality,
@@ -16210,6 +16209,10 @@ async function saveAppointment() {
 
         if (!response.ok) {
             throw new Error(result.error || 'Failed to save appointment');
+        }
+
+        if (!result.data || !result.data.id) {
+            throw new Error('Failed to create appointment - no data returned from server');
         }
 
         await logAudit('create_appointment', { id: result.data.id, client_id: appointmentData.client_id });

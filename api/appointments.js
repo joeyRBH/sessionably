@@ -104,6 +104,12 @@ export default async function handler(req, res) {
         ]
       );
 
+      if (!result.success || !result.data || result.data.length === 0) {
+        return res.status(500).json({
+          error: result.error || 'Failed to create appointment'
+        });
+      }
+
       return res.status(201).json({
         success: true,
         data: result.data[0],
