@@ -55,17 +55,17 @@ export default async function handler(req, res) {
 
     // POST: Create client
     if (req.method === 'POST') {
-      const { name, email, phone, dob, notes } = req.body;
+      const { name, email, phone, date_of_birth, address, city, state, zip_code, emergency_contact, emergency_phone, notes, status } = req.body;
 
       if (!name) {
         return res.status(400).json({ error: 'Name is required' });
       }
 
       const result = await executeQuery(
-        `INSERT INTO clients (name, email, phone, dob, notes, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        `INSERT INTO clients (name, email, phone, date_of_birth, address, city, state, zip_code, emergency_contact, emergency_phone, notes, status, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
          RETURNING *`,
-        [name, email || null, phone || null, dob || null, notes || null]
+        [name, email || null, phone || null, date_of_birth || null, address || null, city || null, state || null, zip_code || null, emergency_contact || null, emergency_phone || null, notes || null, status || 'active']
       );
 
       return res.status(201).json({
@@ -77,18 +77,18 @@ export default async function handler(req, res) {
 
     // PUT: Update client
     if (req.method === 'PUT') {
-      const { id, name, email, phone, dob, notes } = req.body;
+      const { id, name, email, phone, date_of_birth, address, city, state, zip_code, emergency_contact, emergency_phone, notes, status } = req.body;
 
       if (!id || !name) {
         return res.status(400).json({ error: 'ID and name are required' });
       }
 
       const result = await executeQuery(
-        `UPDATE clients 
-         SET name = $1, email = $2, phone = $3, dob = $4, notes = $5, updated_at = CURRENT_TIMESTAMP
-         WHERE id = $6
+        `UPDATE clients
+         SET name = $1, email = $2, phone = $3, date_of_birth = $4, address = $5, city = $6, state = $7, zip_code = $8, emergency_contact = $9, emergency_phone = $10, notes = $11, status = $12, updated_at = CURRENT_TIMESTAMP
+         WHERE id = $13
          RETURNING *`,
-        [name, email || null, phone || null, dob || null, notes || null, id]
+        [name, email || null, phone || null, date_of_birth || null, address || null, city || null, state || null, zip_code || null, emergency_contact || null, emergency_phone || null, notes || null, status || 'active', id]
       );
 
       if (result.data.length === 0) {

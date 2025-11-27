@@ -5949,21 +5949,108 @@
     </div>
 
     <div id="newClientModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
             <span class="close" onclick="closeModal('newClientModal')">&times;</span>
             <h2>New Client</h2>
-            <input type="text" id="clientName" placeholder="Full Name" class="input">
-            <input type="email" id="clientEmail" placeholder="Email" class="input">
-            <input type="tel" id="clientPhone" placeholder="Phone" class="input">
-            <input type="date" id="clientDOB" class="input">
-            <textarea id="clientNotes" placeholder="Notes" class="input"></textarea>
-            <div style="margin: 15px 0;">
-                <label style="display: flex; align-items: center; cursor: pointer;">
-                    <input type="checkbox" id="clientSuperbill" style="margin-right: 8px;">
-                    <span>Send monthly superbill to this client</span>
-                </label>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px;">
+                <!-- Personal Information -->
+                <div style="grid-column: 1 / -1;">
+                    <h3 style="color: var(--primary-color); font-size: 16px; margin-bottom: 12px; border-bottom: 2px solid var(--primary-subtle); padding-bottom: 8px;">Personal Information</h3>
+                </div>
+
+                <div>
+                    <label for="clientName" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Full Name *</label>
+                    <input type="text" id="clientName" placeholder="Full Name" class="input" required>
+                </div>
+
+                <div>
+                    <label for="clientDOB" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Date of Birth</label>
+                    <input type="date" id="clientDOB" class="input">
+                </div>
+
+                <!-- Contact Information -->
+                <div style="grid-column: 1 / -1; margin-top: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 16px; margin-bottom: 12px; border-bottom: 2px solid var(--primary-subtle); padding-bottom: 8px;">Contact Information</h3>
+                </div>
+
+                <div>
+                    <label for="clientEmail" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Email</label>
+                    <input type="email" id="clientEmail" placeholder="email@example.com" class="input">
+                </div>
+
+                <div>
+                    <label for="clientPhone" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Phone</label>
+                    <input type="tel" id="clientPhone" placeholder="(555) 123-4567" class="input">
+                </div>
+
+                <div style="grid-column: 1 / -1;">
+                    <label for="clientAddress" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Address</label>
+                    <input type="text" id="clientAddress" placeholder="Street Address" class="input">
+                </div>
+
+                <div>
+                    <label for="clientCity" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">City</label>
+                    <input type="text" id="clientCity" placeholder="City" class="input">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div>
+                        <label for="clientState" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">State</label>
+                        <input type="text" id="clientState" placeholder="State" class="input" maxlength="2">
+                    </div>
+                    <div>
+                        <label for="clientZip" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">ZIP Code</label>
+                        <input type="text" id="clientZip" placeholder="ZIP" class="input">
+                    </div>
+                </div>
+
+                <!-- Emergency Contact -->
+                <div style="grid-column: 1 / -1; margin-top: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 16px; margin-bottom: 12px; border-bottom: 2px solid var(--primary-subtle); padding-bottom: 8px;">Emergency Contact</h3>
+                </div>
+
+                <div>
+                    <label for="clientEmergencyContact" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Emergency Contact Name</label>
+                    <input type="text" id="clientEmergencyContact" placeholder="Emergency Contact" class="input">
+                </div>
+
+                <div>
+                    <label for="clientEmergencyPhone" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Emergency Phone</label>
+                    <input type="tel" id="clientEmergencyPhone" placeholder="(555) 123-4567" class="input">
+                </div>
+
+                <!-- Additional Information -->
+                <div style="grid-column: 1 / -1; margin-top: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 16px; margin-bottom: 12px; border-bottom: 2px solid var(--primary-subtle); padding-bottom: 8px;">Additional Information</h3>
+                </div>
+
+                <div>
+                    <label for="clientStatus" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Status</label>
+                    <select id="clientStatus" class="input">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+
+                <div style="grid-column: 1 / -1;">
+                    <label for="clientNotes" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Notes</label>
+                    <textarea id="clientNotes" placeholder="Clinical notes, preferences, etc." class="input" rows="3"></textarea>
+                </div>
+
+                <div style="grid-column: 1 / -1; margin: 15px 0;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" id="clientSuperbill" style="margin-right: 8px;">
+                        <span>Send monthly superbill to this client</span>
+                    </label>
+                </div>
             </div>
-            <button onclick="saveClient()" class="btn btn-primary">Save Client</button>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button onclick="saveClient()" class="btn btn-primary" style="flex: 1;">Save Client</button>
+                <button onclick="closeModal('newClientModal')" class="btn btn-secondary">Cancel</button>
+            </div>
         </div>
     </div>
 
@@ -6061,41 +6148,103 @@
 
     <!-- New Appointment Modal -->
     <div id="newAppointmentModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
             <span class="close" onclick="closeModal('newAppointmentModal')">&times;</span>
             <h2>New Appointment</h2>
-            <select id="appointmentClient" class="input">
-                <option value="">Select Client</option>
-            </select>
-            <select id="appointmentModality" class="input">
-                <option value="in-person">In-Person</option>
-                <option value="telehealth">Telehealth (Video)</option>
-            </select>
-            <input type="date" id="appointmentDate" class="input">
-            <input type="time" id="appointmentTime" class="input">
-            <select id="appointmentType" class="input">
-                <option value="">Select Type</option>
-                <option value="90791">Psychiatric Diagnostic Evaluation (90791) - $200</option>
-                <option value="90834">Psychotherapy 45 min (90834) - $150</option>
-                <option value="90837">Psychotherapy 60 min (90837) - $180</option>
-                <option value="90847">Family Psychotherapy (90847) - $200</option>
-                <option value="90853">Group Psychotherapy (90853) - $75</option>
-            </select>
-            <textarea id="appointmentNotes" placeholder="Notes" class="input"></textarea>
-            
-            <!-- TODO: Stripe Integration - Uncomment when implementing payment processing -->
-            <!-- <div style="border-top: 1px solid #e9ecef; padding-top: 16px; margin-top: 16px;">
-                <h3 style="margin-bottom: 12px; font-size: 14px; color: var(--primary-color);">Billing Information</h3>
-                <input type="text" id="appointmentService" placeholder="Service Name" class="input">
-                <input type="number" id="appointmentPrice" placeholder="Price ($)" class="input" step="0.01">
-                <select id="appointmentPaymentStatus" class="input">
-                    <option value="pending">Payment Pending</option>
-                    <option value="paid">Paid</option>
-                    <option value="insurance">Insurance</option>
-                </select>
-            </div> -->
-            
-            <button onclick="saveAppointment()" class="btn btn-primary">Save Appointment</button>
+
+            <div style="display: grid; gap: 16px; margin-top: 20px;">
+                <!-- Client Selection -->
+                <div style="grid-column: 1 / -1;">
+                    <h3 style="color: var(--primary-color); font-size: 16px; margin-bottom: 12px; border-bottom: 2px solid var(--primary-subtle); padding-bottom: 8px;">Client & Session Type</h3>
+                </div>
+
+                <div>
+                    <label for="appointmentClient" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Client *</label>
+                    <select id="appointmentClient" class="input" required>
+                        <option value="">Select Client</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="appointmentModality" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Modality *</label>
+                    <select id="appointmentModality" class="input" required>
+                        <option value="in-person">In-Person</option>
+                        <option value="telehealth">Telehealth (Video)</option>
+                    </select>
+                </div>
+
+                <!-- Date & Time -->
+                <div style="grid-column: 1 / -1; margin-top: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 16px; margin-bottom: 12px; border-bottom: 2px solid var(--primary-subtle); padding-bottom: 8px;">Date & Time</h3>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                    <div>
+                        <label for="appointmentDate" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Date *</label>
+                        <input type="date" id="appointmentDate" class="input" required>
+                    </div>
+
+                    <div>
+                        <label for="appointmentTime" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Time *</label>
+                        <input type="time" id="appointmentTime" class="input" required>
+                    </div>
+
+                    <div>
+                        <label for="appointmentDuration" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Duration (min)</label>
+                        <select id="appointmentDuration" class="input">
+                            <option value="15">15 minutes</option>
+                            <option value="30">30 minutes</option>
+                            <option value="45">45 minutes</option>
+                            <option value="60" selected>60 minutes</option>
+                            <option value="90">90 minutes</option>
+                            <option value="120">120 minutes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Session Information -->
+                <div style="grid-column: 1 / -1; margin-top: 12px;">
+                    <h3 style="color: var(--primary-color); font-size: 16px; margin-bottom: 12px; border-bottom: 2px solid var(--primary-subtle); padding-bottom: 8px;">Session Information</h3>
+                </div>
+
+                <div>
+                    <label for="appointmentType" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Session Type</label>
+                    <select id="appointmentType" class="input">
+                        <option value="">Select Type</option>
+                        <option value="90791">Psychiatric Diagnostic Evaluation (90791)</option>
+                        <option value="90834">Psychotherapy 45 min (90834)</option>
+                        <option value="90837">Psychotherapy 60 min (90837)</option>
+                        <option value="90847">Family Psychotherapy (90847)</option>
+                        <option value="90853">Group Psychotherapy (90853)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="appointmentStatus" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Status</label>
+                    <select id="appointmentStatus" class="input">
+                        <option value="scheduled">Scheduled</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                        <option value="no-show">No Show</option>
+                    </select>
+                </div>
+
+                <div style="grid-column: 1 / -1;">
+                    <label for="appointmentTitle" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Title</label>
+                    <input type="text" id="appointmentTitle" placeholder="e.g., Initial Consultation, Follow-up Session" class="input" value="Session">
+                </div>
+
+                <div style="grid-column: 1 / -1;">
+                    <label for="appointmentNotes" style="display: block; margin-bottom: 4px; font-weight: 500; color: var(--text-primary);">Notes</label>
+                    <textarea id="appointmentNotes" placeholder="Session notes, preparation reminders, etc." class="input" rows="3"></textarea>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button onclick="saveAppointment()" class="btn btn-primary" style="flex: 1;">Save Appointment</button>
+                <button onclick="closeModal('newAppointmentModal')" class="btn btn-secondary">Cancel</button>
+            </div>
         </div>
     </div>
 
@@ -11887,6 +12036,42 @@ async function processScheduledSMSReminders() {
     }
 }
 
+// Load clients from database API
+async function loadClients() {
+    try {
+        const response = await fetch('/api/clients');
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to load clients');
+        }
+
+        clients = result.data || [];
+    } catch (error) {
+        console.error('Error loading clients:', error);
+        showNotification('Error loading clients: ' + error.message, 'error');
+        clients = [];
+    }
+}
+
+// Load appointments from database API
+async function loadAppointments() {
+    try {
+        const response = await fetch('/api/appointments');
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to load appointments');
+        }
+
+        appointments = result.data || [];
+    } catch (error) {
+        console.error('Error loading appointments:', error);
+        // Don't show notification for appointments - might not be critical
+        appointments = [];
+    }
+}
+
 function renderClients() {
     const container = document.getElementById('clientsList');
 
@@ -11894,24 +12079,65 @@ function renderClients() {
     let clientsToRender = [...clients];
     if (isTestClientEnabled()) {
         const testClient = getTestClient();
-        // Add test client at the beginning
         clientsToRender = [testClient, ...clients];
     }
 
     if (clientsToRender.length === 0) {
-        container.innerHTML = '<p style="color: white;">No clients yet</p>';
+        container.innerHTML = `
+            <div style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+                <div style="font-size: 48px; margin-bottom: 16px;">👥</div>
+                <h3 style="color: var(--text-primary); margin-bottom: 8px;">No Clients Yet</h3>
+                <p>Click "+ New Client" to add your first client</p>
+            </div>
+        `;
         return;
     }
 
+    // Status badge helper
+    const getStatusBadge = (status) => {
+        const badges = {
+            'active': { color: '#10B981', bg: '#E0F7F5', label: 'Active' },
+            'inactive': { color: '#888888', bg: '#F3F4F6', label: 'Inactive' },
+            'pending': { color: '#F59E0B', bg: '#FEF3C7', label: 'Pending' }
+        };
+        const badge = badges[status] || badges.active;
+        return `<span style="background: ${badge.bg}; color: ${badge.color}; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">${badge.label}</span>`;
+    };
+
     container.innerHTML = clientsToRender.map(c => {
         const isTest = c.is_test_client === true;
-        const badge = isTest ? '<span style="background: #0ea5e9; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 8px;">TEST</span>' : '';
+        const testBadge = isTest ? '<span style="background: #0ea5e9; color: white; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-left: 8px;">TEST</span>' : '';
+        const statusBadge = getStatusBadge(c.status || 'active');
+        const dob = c.date_of_birth || c.dob;
+
         return `
-            <div class="client-card" onclick="openClientChart('${c.id}')">
-                <h3>${c.name}${badge}</h3>
-                <p>◇ ${c.email || 'N/A'}</p>
-                <p>📞 ${c.phone || 'N/A'}</p>
-                <p>🎂 ${c.dob ? new Date(c.dob).toLocaleDateString() : 'N/A'}</p>
+            <div class="client-card" onclick="openClientChart('${c.id}')" style="cursor: pointer; transition: all 0.2s; border: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                    <h3 style="color: var(--primary-color); margin: 0; font-size: 18px; font-weight: 600;">${c.name}${testBadge}</h3>
+                    ${statusBadge}
+                </div>
+                <div style="display: grid; gap: 8px; color: var(--text-secondary); font-size: 14px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <span>${c.email || 'No email'}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                        <span>${c.phone || 'No phone'}</span>
+                    </div>
+                    ${dob ? `
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <svg style="width: 16px; height: 16px; flex-shrink: 0;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <span>${new Date(dob).toLocaleDateString()}</span>
+                        </div>
+                    ` : ''}
+                </div>
             </div>
         `;
     }).join('');
@@ -11953,28 +12179,57 @@ function openNewClient() {
 }
 
 async function saveClient() {
-    const client = {
+    const clientData = {
         name: document.getElementById('clientName').value,
         email: document.getElementById('clientEmail').value,
         phone: document.getElementById('clientPhone').value,
-        dob: document.getElementById('clientDOB').value,
+        date_of_birth: document.getElementById('clientDOB').value,
+        address: document.getElementById('clientAddress').value,
+        city: document.getElementById('clientCity').value,
+        state: document.getElementById('clientState').value,
+        zip_code: document.getElementById('clientZip').value,
+        emergency_contact: document.getElementById('clientEmergencyContact').value,
+        emergency_phone: document.getElementById('clientEmergencyPhone').value,
         notes: document.getElementById('clientNotes').value,
+        status: document.getElementById('clientStatus').value,
         superbill_monthly: document.getElementById('clientSuperbill').checked
     };
-    
+
+    if (!clientData.name) {
+        showNotification('Client name is required', 'error');
+        return;
+    }
+
     try {
-        // Save to localStorage
-        client.id = Date.now();
-        client.created_at = new Date().toISOString();
-        clients.push(client);
-        saveToStorage('clients', clients);
-        await logAudit('create_client', { id: client.id, name: client.name });
+        const response = await fetch('/api/clients', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(clientData)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to save client');
+        }
+
+        await logAudit('create_client', { id: result.data.id, name: result.data.name });
+        showNotification('Client saved successfully!', 'success');
         closeModal('newClientModal');
-        renderClients();
-        ['clientName','clientEmail','clientPhone','clientDOB','clientNotes'].forEach(id => document.getElementById(id).value = '');
+
+        // Clear form
+        ['clientName','clientEmail','clientPhone','clientDOB','clientAddress','clientCity','clientState','clientZip','clientEmergencyContact','clientEmergencyPhone','clientNotes'].forEach(id => {
+            document.getElementById(id).value = '';
+        });
+        document.getElementById('clientStatus').value = 'active';
         document.getElementById('clientSuperbill').checked = false;
+
+        // Reload clients
+        await loadClients();
+        renderClients();
     } catch (error) {
-        alert('Error: ' + error.message);
+        console.error('Error saving client:', error);
+        showNotification('Error: ' + error.message, 'error');
     }
 }
 
@@ -15872,117 +16127,121 @@ async function saveAppointment() {
     console.log('💾 Saving appointment...');
 
     const clientId = document.getElementById('appointmentClient').value;
+    const appointmentDate = document.getElementById('appointmentDate').value;
+    const appointmentTime = document.getElementById('appointmentTime').value;
+
     if (!clientId) {
-        alert('Please select a client');
+        showNotification('Please select a client', 'error');
         return;
     }
 
-    let client = clients.find(c => c.id == clientId);
-    // Check if this is the test client
-    if (!client && clientId === 'test-client-001' && isTestClientEnabled()) {
-        client = getTestClient();
+    if (!appointmentDate || !appointmentTime) {
+        showNotification('Please select date and time', 'error');
+        return;
     }
-    const clientName = client ? client.name : 'Unknown Client';
 
     const modality = document.getElementById('appointmentModality').value;
 
     // Check telehealth feature access
     if (modality === 'telehealth') {
-        const access = window.featureGate.checkFeature('integratedTelehealth');
-        if (!access.allowed) {
+        const access = window.featureGate && window.featureGate.checkFeature('integratedTelehealth');
+        if (access && !access.allowed) {
             window.featureGate.showUpgradePrompt('integratedTelehealth');
             return;
         }
     }
 
-    // Determine duration based on CPT code/type
-    const appointmentType = document.getElementById('appointmentType').value;
-    let duration = 60; // Default duration
-    if (appointmentType === '90834') duration = 45;
-    else if (appointmentType === '90837') duration = 60;
-    else if (appointmentType === '90853') duration = 45;
-
-    const appointment = {
-        client_id: clientId,
-        client_name: clientName,
-        appointment_date: document.getElementById('appointmentDate').value,
-        appointment_time: document.getElementById('appointmentTime').value,
-        duration: duration,
-        type: appointmentType,
+    const appointmentData = {
+        client_id: parseInt(clientId),
+        title: document.getElementById('appointmentTitle').value || 'Session',
+        appointment_date: appointmentDate,
+        appointment_time: appointmentTime,
+        duration_minutes: parseInt(document.getElementById('appointmentDuration').value),
+        appointment_type: document.getElementById('appointmentType').value,
+        cpt_code: document.getElementById('appointmentType').value,
         notes: document.getElementById('appointmentNotes').value,
-        cpt_code: appointmentType,
         modality: modality,
-        status: 'scheduled'
+        status: document.getElementById('appointmentStatus').value
     };
-    
-    console.log('[NOTE] Appointment data:', appointment);
+
+    console.log('[NOTE] Appointment data:', appointmentData);
 
     try {
-        if (window.editingAppointmentId) {
-            // Update existing appointment
-            const index = appointments.findIndex(apt => apt.id === window.editingAppointmentId);
-            if (index !== -1) {
-                appointment.id = window.editingAppointmentId;
-                appointment.created_at = appointments[index].created_at;
-                appointments[index] = appointment;
-                await logAudit('update_appointment', { id: appointment.id });
-            }
-            delete window.editingAppointmentId;
-            // Reset modal title
-            document.querySelector('#newAppointmentModal h2').textContent = 'New Appointment';
-        } else {
-            // Create new appointment
-            appointment.id = Date.now();
-            appointment.created_at = new Date().toISOString();
+        let telehealthInfo = null;
 
-            // If telehealth, create WebRTC video room
-            if (modality === 'telehealth') {
-                console.log('📹 Creating WebRTC video room for telehealth appointment...');
-                try {
-                    const videoResponse = await fetch('/api/webrtc-signaling', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            action: 'create-room',
-                            appointmentId: appointment.id,
-                            roomName: `appointment-${appointment.id}`
-                        })
-                    });
+        // If telehealth, create WebRTC video room before saving
+        if (modality === 'telehealth') {
+            console.log('📹 Creating WebRTC video room for telehealth appointment...');
+            try {
+                const tempId = Date.now();
+                const videoResponse = await fetch('/api/webrtc-signaling', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'create-room',
+                        appointmentId: tempId,
+                        roomName: `appointment-${tempId}`
+                    })
+                });
 
-                    const videoData = await videoResponse.json();
-                    if (videoData.success) {
-                        appointment.telehealth_room_id = videoData.room.roomId;
-                        appointment.telehealth_link = window.location.origin + videoData.link;
-                        console.log('✓ WebRTC room created:', appointment.telehealth_room_id);
-                        console.log('✓ Video link:', appointment.telehealth_link);
-                    } else {
-                        console.error('⚠️ Failed to create video room:', videoData.error);
-                    }
-                } catch (videoError) {
-                    console.error('❌ Error creating video room:', videoError);
-                    // Continue without video room - can be added later
+                const videoData = await videoResponse.json();
+                if (videoData.success) {
+                    telehealthInfo = {
+                        room_id: videoData.room.roomId,
+                        link: window.location.origin + videoData.link
+                    };
+                    appointmentData.telehealth_room_id = telehealthInfo.room_id;
+                    appointmentData.telehealth_link = telehealthInfo.link;
+                    console.log('✓ WebRTC room created:', telehealthInfo.room_id);
                 }
+            } catch (videoError) {
+                console.error('❌ Error creating video room:', videoError);
             }
+        }
 
-            appointments.push(appointment);
-            await logAudit('create_appointment', { id: appointment.id, client_id: appointment.client_id });
+        // Save appointment to database
+        const response = await fetch('/api/appointments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(appointmentData)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to save appointment');
         }
-        
-        saveToStorage('appointments', appointments);
-        console.log('✓ Appointment saved! Total appointments:', appointments.length);
-        
-        // Schedule SMS reminder for new appointments (24 hours before)
-        if (!window.editingAppointmentId) {
-            await scheduleAppointmentSMSReminder(appointment);
+
+        await logAudit('create_appointment', { id: result.data.id, client_id: appointmentData.client_id });
+
+        // Schedule SMS reminder
+        try {
+            await scheduleAppointmentSMSReminder(result.data);
+        } catch (smsError) {
+            console.error('Error scheduling SMS reminder:', smsError);
         }
-        
+
+        showNotification('Appointment saved successfully!', 'success');
         closeModal('newAppointmentModal');
+
+        // Clear form
+        document.getElementById('appointmentClient').value = '';
+        document.getElementById('appointmentTitle').value = 'Session';
+        document.getElementById('appointmentDate').value = '';
+        document.getElementById('appointmentTime').value = '';
+        document.getElementById('appointmentDuration').value = '60';
+        document.getElementById('appointmentType').value = '';
+        document.getElementById('appointmentNotes').value = '';
+        document.getElementById('appointmentStatus').value = 'scheduled';
+
+        // Reload appointments
+        await loadAppointments();
         renderCalendar();
         renderAppointmentsList();
-        alert('✓ Appointment saved!');
+
     } catch (error) {
         console.error('❌ Error saving appointment:', error);
-        alert('Error: ' + error.message);
+        showNotification('Error: ' + error.message, 'error');
     }
 }
 
@@ -18574,12 +18833,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Initialize localStorage demo data
             initializeDemoData();
             
-            // Load data from localStorage (non-blocking)
-            await new Promise(resolve => {
-                setTimeout(() => {
-                    clients = loadFromStorage('clients', []);
+            // Load data from database API (non-blocking)
+            await new Promise(async (resolve) => {
+                setTimeout(async () => {
+                    // Load clients and appointments from database
+                    await loadClients();
+                    await loadAppointments();
                     assignedDocs = loadFromStorage('assigned_docs', []);
-                    appointments = loadFromStorage('appointments', []);
                     invoices = loadFromStorage('invoices', []);
                     resolve();
                 }, 0);
