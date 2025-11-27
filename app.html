@@ -16153,10 +16153,11 @@ async function saveAppointment() {
 
     const appointmentData = {
         client_id: parseInt(clientId),
+        title: document.getElementById('appointmentTitle').value || 'Session',
         appointment_date: appointmentDate,
         appointment_time: appointmentTime,
-        duration: parseInt(document.getElementById('appointmentDuration').value),
-        type: document.getElementById('appointmentType').value,
+        duration_minutes: parseInt(document.getElementById('appointmentDuration').value),
+        appointment_type: document.getElementById('appointmentType').value,
         cpt_code: document.getElementById('appointmentType').value,
         notes: document.getElementById('appointmentNotes').value,
         modality: modality,
