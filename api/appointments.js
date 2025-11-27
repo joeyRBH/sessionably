@@ -77,7 +77,7 @@ export default async function handler(req, res) {
 
     // POST: Create appointment
     if (req.method === 'POST') {
-      const { client_id, appointment_date, appointment_time, duration, type, cpt_code, notes, status, modality, telehealth_room_id, telehealth_link } = req.body;
+      const { client_id, title, description, appointment_date, appointment_time, duration_minutes, appointment_type, cpt_code, notes, status, modality, telehealth_room_id, telehealth_link } = req.body;
 
       if (!client_id || !appointment_date || !appointment_time) {
         return res.status(400).json({
@@ -86,15 +86,17 @@ export default async function handler(req, res) {
       }
 
       const result = await executeQuery(
-        `INSERT INTO appointments (client_id, appointment_date, appointment_time, duration, type, cpt_code, notes, status, modality, telehealth_room_id, telehealth_link, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        `INSERT INTO appointments (client_id, title, description, appointment_date, appointment_time, duration_minutes, appointment_type, cpt_code, notes, status, modality, telehealth_room_id, telehealth_link, created_at, updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
          RETURNING *`,
         [
           client_id,
+          title || 'Session',
+          description || null,
           appointment_date,
           appointment_time,
-          duration || 60,
-          type || null,
+          duration_minutes || 60,
+          appointment_type || null,
           cpt_code || null,
           notes || null,
           status || 'scheduled',
@@ -103,6 +105,12 @@ export default async function handler(req, res) {
           telehealth_link || null
         ]
       );
+
+      if (!result.success || !result.data || result.data.length === 0) {
+        return res.status(500).json({
+          error: result.error || 'Failed to create appointment'
+        });
+      }
 
       return res.status(201).json({
         success: true,
@@ -113,7 +121,7 @@ export default async function handler(req, res) {
 
     // PUT: Update appointment
     if (req.method === 'PUT') {
-      const { id, client_id, appointment_date, appointment_time, duration, type, cpt_code, notes, status, modality, telehealth_room_id, telehealth_link } = req.body;
+      const { id, client_id, title, description, appointment_date, appointment_time, duration_minutes, appointment_type, cpt_code, notes, status, modality, telehealth_room_id, telehealth_link } = req.body;
 
       if (!id) {
         return res.status(400).json({ error: 'ID is required' });
@@ -122,25 +130,29 @@ export default async function handler(req, res) {
       const result = await executeQuery(
         `UPDATE appointments
          SET client_id = COALESCE($1, client_id),
-             appointment_date = COALESCE($2, appointment_date),
-             appointment_time = COALESCE($3, appointment_time),
-             duration = COALESCE($4, duration),
-             type = COALESCE($5, type),
-             cpt_code = COALESCE($6, cpt_code),
-             notes = COALESCE($7, notes),
-             status = COALESCE($8, status),
-             modality = COALESCE($9, modality),
-             telehealth_room_id = COALESCE($10, telehealth_room_id),
-             telehealth_link = COALESCE($11, telehealth_link),
+             title = COALESCE($2, title),
+             description = COALESCE($3, description),
+             appointment_date = COALESCE($4, appointment_date),
+             appointment_time = COALESCE($5, appointment_time),
+             duration_minutes = COALESCE($6, duration_minutes),
+             appointment_type = COALESCE($7, appointment_type),
+             cpt_code = COALESCE($8, cpt_code),
+             notes = COALESCE($9, notes),
+             status = COALESCE($10, status),
+             modality = COALESCE($11, modality),
+             telehealth_room_id = COALESCE($12, telehealth_room_id),
+             telehealth_link = COALESCE($13, telehealth_link),
              updated_at = CURRENT_TIMESTAMP
-         WHERE id = $12
+         WHERE id = $14
          RETURNING *`,
         [
           client_id,
+          title,
+          description,
           appointment_date,
           appointment_time,
-          duration,
-          type,
+          duration_minutes,
+          appointment_type,
           cpt_code,
           notes,
           status,

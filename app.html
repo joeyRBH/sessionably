@@ -16212,6 +16212,10 @@ async function saveAppointment() {
             throw new Error(result.error || 'Failed to save appointment');
         }
 
+        if (!result.data || !result.data.id) {
+            throw new Error('Failed to create appointment - no data returned from server');
+        }
+
         await logAudit('create_appointment', { id: result.data.id, client_id: appointmentData.client_id });
 
         // Schedule SMS reminder

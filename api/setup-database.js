@@ -42,14 +42,26 @@ CREATE TABLE IF NOT EXISTS appointments (
     location VARCHAR(255),
     provider VARCHAR(255),
     appointment_type VARCHAR(100),
+    cpt_code VARCHAR(10),
     notes TEXT,
     reminder_sent BOOLEAN DEFAULT false,
+    modality VARCHAR(50) DEFAULT 'in-person',
+    telehealth_room_id VARCHAR(255),
+    telehealth_link TEXT,
+    completed_at TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 CREATE INDEX idx_appointments_client ON appointments(client_id);
 CREATE INDEX idx_appointments_date ON appointments(appointment_date);
 CREATE INDEX idx_appointments_status ON appointments(status);
+
+-- Add missing columns to existing appointments table (if it already exists)
+ALTER TABLE appointments ADD COLUMN IF NOT EXISTS cpt_code VARCHAR(10);
+ALTER TABLE appointments ADD COLUMN IF NOT EXISTS modality VARCHAR(50) DEFAULT 'in-person';
+ALTER TABLE appointments ADD COLUMN IF NOT EXISTS telehealth_room_id VARCHAR(255);
+ALTER TABLE appointments ADD COLUMN IF NOT EXISTS telehealth_link TEXT;
+ALTER TABLE appointments ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP;
 
 CREATE TABLE IF NOT EXISTS invoices (
     id SERIAL PRIMARY KEY,
