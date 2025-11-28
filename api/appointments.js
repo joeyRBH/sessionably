@@ -21,14 +21,14 @@ export default async function handler(req, res) {
 
     // GET: Retrieve appointments
     if (req.method === 'GET') {
-      const { id, client_id } = req.query;
+      const { id, client_id, start_date, end_date } = req.query;
 
       if (id) {
         // Get single appointment
         const result = await executeQuery(
-          `SELECT a.*, c.name as client_name 
+          `SELECT a.*, c.name as client_name, c.email as client_email, c.phone as client_phone
            FROM appointments a
-           LEFT JOIN clients c ON a.client_id = c.id
+           LEFT JOIN clients_v2 c ON a.client_id = c.id
            WHERE a.id = $1`,
           [id]
         );
@@ -45,11 +45,11 @@ export default async function handler(req, res) {
       } else if (client_id) {
         // Get appointments for specific client
         const result = await executeQuery(
-          `SELECT a.*, c.name as client_name 
+          `SELECT a.*, c.name as client_name, c.email as client_email
            FROM appointments a
-           LEFT JOIN clients c ON a.client_id = c.id
+           LEFT JOIN clients_v2 c ON a.client_id = c.id
            WHERE a.client_id = $1
-           ORDER BY a.appointment_date DESC, a.appointment_time DESC`,
+           ORDER BY a.start_time DESC`,
           [client_id]
         );
 
@@ -59,13 +59,31 @@ export default async function handler(req, res) {
           message: 'Appointments retrieved successfully'
         });
       } else {
-        // Get all appointments
-        const result = await executeQuery(
-          `SELECT a.*, c.name as client_name 
+        // Get all appointments with optional date range filter
+        let query = `SELECT a.*, c.name as client_name, c.email as client_email
            FROM appointments a
-           LEFT JOIN clients c ON a.client_id = c.id
-           ORDER BY a.appointment_date DESC, a.appointment_time DESC`
-        );
+           LEFT JOIN clients_v2 c ON a.client_id = c.id`;
+        const params = [];
+        let paramCount = 0;
+
+        if (start_date || end_date) {
+          query += ' WHERE';
+          if (start_date) {
+            paramCount++;
+            query += ` a.start_time >= $${paramCount}`;
+            params.push(start_date);
+          }
+          if (end_date) {
+            if (paramCount > 0) query += ' AND';
+            paramCount++;
+            query += ` a.start_time <= $${paramCount}`;
+            params.push(end_date);
+          }
+        }
+
+        query += ' ORDER BY a.start_time DESC';
+
+        const result = await executeQuery(query, params);
 
         return res.status(200).json({
           success: true,
@@ -77,32 +95,27 @@ export default async function handler(req, res) {
 
     // POST: Create appointment
     if (req.method === 'POST') {
-      const { client_id, title, description, appointment_date, appointment_time, duration_minutes, appointment_type, cpt_code, notes, status, modality, telehealth_room_id, telehealth_link } = req.body;
+      const { client_id, title, start_time, end_time, appointment_type, recurring_pattern, notes, status } = req.body;
 
-      if (!client_id || !appointment_date || !appointment_time) {
+      if (!client_id || !title || !start_time || !end_time) {
         return res.status(400).json({
-          error: 'client_id, appointment_date, and appointment_time are required'
+          error: 'client_id, title, start_time, and end_time are required'
         });
       }
 
       const result = await executeQuery(
-        `INSERT INTO appointments (client_id, title, description, appointment_date, appointment_time, duration_minutes, appointment_type, cpt_code, notes, status, modality, telehealth_room_id, telehealth_link, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        `INSERT INTO appointments (client_id, title, start_time, end_time, appointment_type, recurring_pattern, status, notes)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          RETURNING *`,
         [
           client_id,
-          title || 'Session',
-          description || null,
-          appointment_date,
-          appointment_time,
-          duration_minutes || 60,
+          title,
+          start_time,
+          end_time,
           appointment_type || null,
-          cpt_code || null,
-          notes || null,
+          recurring_pattern || null,
           status || 'scheduled',
-          modality || 'in-person',
-          telehealth_room_id || null,
-          telehealth_link || null
+          notes || null
         ]
       );
 
@@ -121,7 +134,7 @@ export default async function handler(req, res) {
 
     // PUT: Update appointment
     if (req.method === 'PUT') {
-      const { id, client_id, title, description, appointment_date, appointment_time, duration_minutes, appointment_type, cpt_code, notes, status, modality, telehealth_room_id, telehealth_link } = req.body;
+      const { id, client_id, title, start_time, end_time, appointment_type, recurring_pattern, status, notes } = req.body;
 
       if (!id) {
         return res.status(400).json({ error: 'ID is required' });
@@ -131,34 +144,23 @@ export default async function handler(req, res) {
         `UPDATE appointments
          SET client_id = COALESCE($1, client_id),
              title = COALESCE($2, title),
-             description = COALESCE($3, description),
-             appointment_date = COALESCE($4, appointment_date),
-             appointment_time = COALESCE($5, appointment_time),
-             duration_minutes = COALESCE($6, duration_minutes),
-             appointment_type = COALESCE($7, appointment_type),
-             cpt_code = COALESCE($8, cpt_code),
-             notes = COALESCE($9, notes),
-             status = COALESCE($10, status),
-             modality = COALESCE($11, modality),
-             telehealth_room_id = COALESCE($12, telehealth_room_id),
-             telehealth_link = COALESCE($13, telehealth_link),
-             updated_at = CURRENT_TIMESTAMP
-         WHERE id = $14
+             start_time = COALESCE($3, start_time),
+             end_time = COALESCE($4, end_time),
+             appointment_type = COALESCE($5, appointment_type),
+             recurring_pattern = COALESCE($6, recurring_pattern),
+             status = COALESCE($7, status),
+             notes = COALESCE($8, notes)
+         WHERE id = $9
          RETURNING *`,
         [
           client_id,
           title,
-          description,
-          appointment_date,
-          appointment_time,
-          duration_minutes,
+          start_time,
+          end_time,
           appointment_type,
-          cpt_code,
-          notes,
+          recurring_pattern,
           status,
-          modality,
-          telehealth_room_id,
-          telehealth_link,
+          notes,
           id
         ]
       );
