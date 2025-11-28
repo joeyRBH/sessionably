@@ -11946,9 +11946,17 @@ async function scheduleAppointmentSMSReminder(appointment) {
         
         console.log('📱 Formatted phone number:', phoneNumber);
 
-        const appointmentDateTime = new Date(`${appointment.appointment_date} ${appointment.appointment_time}`);
+        // Parse date and time components explicitly for reliable parsing
+        // appointment_date format: YYYY-MM-DD
+        // appointment_time format: HH:MM or HH:MM:SS (PostgreSQL TIME)
+        const [year, month, day] = appointment.appointment_date.split('-').map(Number);
+        const timeParts = appointment.appointment_time.split(':').map(Number);
+        const [hours, minutes] = timeParts;
+        const seconds = timeParts[2] || 0; // Default to 0 if no seconds
+
+        const appointmentDateTime = new Date(year, month - 1, day, hours, minutes, seconds);
         const reminderDateTime = new Date(appointmentDateTime.getTime() - (24 * 60 * 60 * 1000)); // 24 hours before
-        
+
         console.log('📱 Appointment datetime:', appointmentDateTime.toLocaleString());
         console.log('📱 Reminder scheduled for:', reminderDateTime.toLocaleString());
         
