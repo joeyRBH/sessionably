@@ -526,7 +526,26 @@ export default async function handler(req, res) {
       connect_timeout: 30
     });
 
-    await sql.unsafe(SCHEMA_SQL);
+    let setupError = null;
+    try {
+      await sql.unsafe(SCHEMA_SQL);
+    } catch (err) {
+      // Ignore "already exists" errors but capture others
+      if (!err.message || !err.message.includes('already exists')) {
+        setupError = err;
+      }
+    }
+
+    // Always check and verify the appointments table columns
+    const columns = await sql`
+      SELECT column_name
+      FROM information_schema.columns
+      WHERE table_name = 'appointments'
+    `;
+
+    const columnNames = columns.map(c => c.columnName || c.column_name);
+    const requiredColumns = ['cpt_code', 'modality', 'telehealth_room_id', 'telehealth_link'];
+    const missingColumns = requiredColumns.filter(col => !columnNames.includes(col));
 
     const tables = await sql`
       SELECT tablename FROM pg_tables WHERE schemaname = 'public' ORDER BY tablename
@@ -536,29 +555,30 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
-      message: '🎉 Database setup complete!',
+      message: setupError ? '⚠️ Database setup completed with warnings' : '✅ Database setup complete!',
+      warning: setupError ? setupError.message : null,
       created: {
         tables: tables.length,
         tableNames: tables.map(t => t.tablename)
       },
-      nextSteps: [
-        '✅ Database is ready!',
-        '🔒 Change default admin password (admin/admin123)',
-        '🧪 Test at /api/health',
-        '🚀 Your app is ready to use'
-      ]
+      appointments_table: {
+        total_columns: columnNames.length,
+        has_required_columns: missingColumns.length === 0,
+        missing_columns: missingColumns,
+        status: missingColumns.length === 0 ? '✅ All columns present' : '❌ Missing columns'
+      },
+      nextSteps: missingColumns.length > 0
+        ? ['❌ Missing columns detected - contact support']
+        : [
+            '✅ Database is ready!',
+            '🔒 Change default admin password (admin/admin123)',
+            '🧪 Test at /api/health',
+            '🚀 Your app is ready to use'
+          ]
     });
 
   } catch (error) {
     console.error('Setup error:', error);
-
-    if (error.message && error.message.includes('already exists')) {
-      return res.status(200).json({
-        success: true,
-        message: '✅ Database already set up!',
-        note: 'Tables already exist. No action needed.'
-      });
-    }
 
     return res.status(500).json({
       error: 'Database setup failed',

@@ -11918,8 +11918,10 @@ This is an automated invoice. Please contact our office with any questions.
 async function scheduleAppointmentSMSReminder(appointment) {
     try {
         console.log('📱 Scheduling SMS reminder for appointment:', appointment.id);
-        
-        const client = clients.find(c => c.id == appointment.client_id);
+
+        // Handle both camelCase (from database) and snake_case field names
+        const clientId = appointment.clientId || appointment.client_id;
+        const client = clients.find(c => c.id == clientId);
         if (!client || !client.phone) {
             console.log('❌ Client phone not found - SMS reminder not scheduled:', { 
                 client: client?.name, 
@@ -11946,9 +11948,13 @@ async function scheduleAppointmentSMSReminder(appointment) {
         
         console.log('📱 Formatted phone number:', phoneNumber);
 
-        const appointmentDateTime = new Date(appointment.appointment_date + 'T' + appointment.appointment_time);
+        // Handle both camelCase (from database) and snake_case (from frontend) field names
+        const appointmentDate = appointment.appointmentDate || appointment.appointment_date;
+        const appointmentTime = appointment.appointmentTime || appointment.appointment_time;
+
+        const appointmentDateTime = new Date(appointmentDate + 'T' + appointmentTime);
         const reminderDateTime = new Date(appointmentDateTime.getTime() - (24 * 60 * 60 * 1000)); // 24 hours before
-        
+
         console.log('📱 Appointment datetime:', appointmentDateTime.toLocaleString());
         console.log('📱 Reminder scheduled for:', reminderDateTime.toLocaleString());
         
@@ -11973,7 +11979,7 @@ async function scheduleAppointmentSMSReminder(appointment) {
         const smsReminder = {
             id: Date.now(),
             appointment_id: appointment.id,
-            client_id: appointment.client_id,
+            client_id: clientId,
             phone: phoneNumber,
             message: message,
             scheduled_for: reminderDateTime.toISOString(),
@@ -14715,17 +14721,8 @@ function escapeHtml(text) {
 // ================================
 
 // Appointments Management
-async function loadAppointments() {
-    try {
-        const month = currentCalendarDate.getMonth() + 1;
-        const year = currentCalendarDate.getFullYear();
-        // Appointments already loaded from localStorage
-        renderCalendar();
-        renderAppointmentsList();
-    } catch (error) {
-        console.error('Appointments error:', error);
-    }
-}
+// Note: loadAppointments() is defined earlier in the file (around line 12064)
+// and properly fetches appointments from the API
 
 // AI NoteTaker Functions
 function checkAINoteTakerSubscription() {
