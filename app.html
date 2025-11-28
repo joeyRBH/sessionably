@@ -14574,17 +14574,8 @@ function escapeHtml(text) {
 // ================================
 
 // Appointments Management
-async function loadAppointments() {
-    try {
-        const month = currentCalendarDate.getMonth() + 1;
-        const year = currentCalendarDate.getFullYear();
-        // Appointments already loaded from localStorage
-        renderCalendar();
-        renderAppointmentsList();
-    } catch (error) {
-        console.error('Appointments error:', error);
-    }
-}
+// Note: loadAppointments() is defined earlier in the file (around line 12064)
+// and properly fetches appointments from the API
 
 // AI NoteTaker Functions
 function checkAINoteTakerSubscription() {
