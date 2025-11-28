@@ -4743,6 +4743,45 @@
                 </div>
                 <input type="text" id="clientSearchInput" class="search-input" placeholder="Search clients..." oninput="debouncedFilterClients()">
                 <div id="clientsList" class="grid"></div>
+
+                <!-- Enhanced Client Management -->
+                <div class="card" style="margin-top: 24px;">
+                    <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+                        <input type="text" id="enhancedClientSearch" placeholder="Search clients (name, email, notes)..."
+                               oninput="searchEnhancedClients()"
+                               style="flex: 1; min-width: 250px; padding: 10px 14px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 14px;">
+                        <select id="statusFilter" onchange="searchEnhancedClients()"
+                                style="padding: 10px 14px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 14px; background: white;">
+                            <option value="">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                        <input type="text" id="tagFilter" placeholder="Filter by tag..." onchange="searchEnhancedClients()"
+                               style="padding: 10px 14px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-size: 14px; min-width: 150px;">
+                    </div>
+
+                    <div style="overflow-x: auto;">
+                        <table id="clientsTable" style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #F8F9FA; border-bottom: 2px solid var(--border-color);">
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-primary); font-size: 13px;">Name</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-primary); font-size: 13px;">Email</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-primary); font-size: 13px;">Phone</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-primary); font-size: 13px;">Status</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-primary); font-size: 13px;">Tags</th>
+                                    <th style="padding: 12px; text-align: left; font-weight: 600; color: var(--text-primary); font-size: 13px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientsTableBody">
+                                <tr>
+                                    <td colspan="6" style="padding: 40px; text-align: center; color: var(--text-secondary);">
+                                        Loading clients...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <div id="messagesContent" class="tab-content">
@@ -12172,6 +12211,114 @@ function filterClients() {
             </div>
         `;
     }).join('');
+}
+
+// Enhanced Client Management Functions
+async function searchEnhancedClients() {
+    const searchTerm = document.getElementById('enhancedClientSearch').value;
+    const status = document.getElementById('statusFilter').value;
+    const tag = document.getElementById('tagFilter').value;
+
+    try {
+        const params = new URLSearchParams();
+        if (searchTerm) params.append('q', searchTerm);
+        if (status) params.append('status', status);
+        if (tag) params.append('tag', tag);
+
+        const response = await fetch(`/api/clients-enhanced?${params.toString()}`);
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || 'Failed to search clients');
+        }
+
+        renderEnhancedClientsTable(result.data || []);
+    } catch (error) {
+        console.error('Error searching enhanced clients:', error);
+        const tbody = document.getElementById('clientsTableBody');
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" style="padding: 40px; text-align: center; color: var(--danger-color);">
+                    Error loading clients: ${error.message}
+                </td>
+            </tr>
+        `;
+    }
+}
+
+function renderEnhancedClientsTable(clientsData) {
+    const tbody = document.getElementById('clientsTableBody');
+
+    if (clientsData.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="6" style="padding: 40px; text-align: center; color: var(--text-secondary);">
+                    No clients found
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = clientsData.map(client => {
+        const statusColors = {
+            'active': { bg: '#D0F7F5', color: '#00B4A6' },
+            'inactive': { bg: '#F3F4F6', color: '#888888' }
+        };
+        const statusStyle = statusColors[client.status] || statusColors.active;
+
+        const tagsHtml = (client.tags && client.tags.length > 0)
+            ? client.tags.map(tag => `
+                <span style="background: #F5A623; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; margin-right: 4px; display: inline-block;">
+                    ${tag}
+                </span>
+            `).join('')
+            : '<span style="color: var(--text-tertiary); font-size: 12px;">No tags</span>';
+
+        return `
+            <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.2s;"
+                onmouseover="this.style.background='#F8F9FA'"
+                onmouseout="this.style.background='white'">
+                <td style="padding: 12px; font-weight: 500; color: var(--text-primary);">${client.name}</td>
+                <td style="padding: 12px; color: var(--text-secondary);">${client.email || '-'}</td>
+                <td style="padding: 12px; color: var(--text-secondary);">${client.phone || '-'}</td>
+                <td style="padding: 12px;">
+                    <span style="background: ${statusStyle.bg}; color: ${statusStyle.color}; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                        ${client.status || 'active'}
+                    </span>
+                </td>
+                <td style="padding: 12px;">${tagsHtml}</td>
+                <td style="padding: 12px;">
+                    <button onclick="viewEnhancedClient(${client.id})"
+                            style="background: var(--primary-color); color: white; border: none; padding: 6px 12px; border-radius: var(--border-radius-sm); cursor: pointer; font-size: 13px; transition: all 0.2s;"
+                            onmouseover="this.style.background='var(--primary-hover)'"
+                            onmouseout="this.style.background='var(--primary-color)'">
+                        View
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function viewEnhancedClient(clientId) {
+    // Navigate to client chart or open client detail modal
+    if (typeof openClientChart === 'function') {
+        openClientChart(clientId);
+    } else {
+        console.log('View client:', clientId);
+    }
+}
+
+// Load enhanced clients when clients tab is opened
+if (typeof window.addEventListener !== 'undefined') {
+    const originalShowTab = window.showTab;
+    window.showTab = function(tabName) {
+        if (originalShowTab) originalShowTab(tabName);
+        if (tabName === 'clients') {
+            searchEnhancedClients();
+        }
+    };
 }
 
 function openNewClient() {
