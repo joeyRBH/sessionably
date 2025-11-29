@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Sessionably - Setup Wizard</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00B4A6;
+            --primary-hover: #009688;
+            --primary-light: #26C6BA;
+            --primary-subtle: #E0F7F5;
+            --secondary-color: #888888;
+            --success-color: #10B981;
+            --background-gradient: linear-gradient(135deg, #FAFAFA 0%, #F5F5F5 100%);
+            --surface-color: #FFFFFF;
+            --text-primary: #1A1A2E;
+            --text-secondary: #888888;
+            --border-color: #E8EAED;
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.08), 0 6px 12px -2px rgba(0, 0, 0, 0.12);
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--background-gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text-primary);
+        }
+
+        .wizard-container {
+            background: var(--surface-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            max-width: 800px;
+            width: 100%;
+            padding: 3rem;
+        }
+
+        .wizard-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .wizard-logo {
+            width: 200px;
+            margin-bottom: 1.5rem;
+        }
+
+        .wizard-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .wizard-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 0;
+        }
+
+        .progress-fill {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+            z-index: 1;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--surface-color);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .progress-step.active .progress-step-icon {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .progress-step.completed .progress-step-icon {
+            background: var(--success-color);
+            border-color: var(--success-color);
+            color: white;
+        }
+
+        .progress-step-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .progress-step.active .progress-step-label {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* Steps Content */
+        .wizard-content {
+            min-height: 400px;
+        }
+
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .service-card {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            border-color: var(--primary-light);
+        }
+
+        .service-card.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-subtle);
+        }
+
+        .service-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .service-card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .service-card-price {
+            color: var(--text-secondary);
+        }
+
+        .service-card input[type="checkbox"] {
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        /* Buttons */
+        .wizard-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--surface-color);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: #F8F9FA;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .success-icon {
+            text-align: center;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .completion-message {
+            text-align: center;
+        }
+
+        .completion-message h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .completion-message p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .feature-checklist {
+            background: var(--primary-subtle);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-checklist h4 {
+            margin-bottom: 1rem;
+        }
+
+        .feature-checklist ul {
+            list-style: none;
+        }
+
+        .feature-checklist li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .feature-checklist li::before {
+            content: '✓';
+            color: var(--success-color);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="wizard-container">
+        <div class="wizard-header">
+            <svg class="wizard-logo" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <text x="0" y="30" font-family="Plus Jakarta Sans, sans-serif" font-size="24" font-weight="700" fill="#00B4A6">Sessionably</text>
+            </svg>
+            <h1 class="wizard-title">Welcome to Sessionably!</h1>
+            <p class="wizard-subtitle">Let's get your practice set up in just 4 simple steps</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            <div class="progress-step active" data-step="1">
+                <div class="progress-step-icon">1</div>
+                <div class="progress-step-label">Info</div>
+            </div>
+            <div class="progress-step" data-step="2">
+                <div class="progress-step-icon">2</div>
+                <div class="progress-step-label">Practice</div>
+            </div>
+            <div class="progress-step" data-step="3">
+                <div class="progress-step-icon">3</div>
+                <div class="progress-step-label">Services</div>
+            </div>
+            <div class="progress-step" data-step="4">
+                <div class="progress-step-icon">4</div>
+                <div class="progress-step-label">Billing</div>
+            </div>
+        </div>
+
+        <!-- Wizard Content -->
+        <div class="wizard-content">
+            <!-- Step 1: Info -->
+            <div class="wizard-step active" data-step="1">
+                <h2 class="step-title">Tell us about yourself</h2>
+                <p class="step-description">We'll use this information to personalize your experience</p>
+
+                <form id="step1Form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="licenseType">License Type *</label>
+                        <select id="licenseType" required>
+                            <option value="">Select your license</option>
+                            <option value="LCSW">Licensed Clinical Social Worker (LCSW)</option>
+                            <option value="LMFT">Licensed Marriage and Family Therapist (LMFT)</option>
+                            <option value="LPC">Licensed Professional Counselor (LPC)</option>
+                            <option value="PsyD">Doctor of Psychology (PsyD)</option>
+                            <option value="PhD">Doctor of Philosophy (PhD)</option>
+                            <option value="LPCC">Licensed Professional Clinical Counselor (LPCC)</option>
+                            <option value="LMHC">Licensed Mental Health Counselor (LMHC)</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="licenseNumber">License Number</label>
+                        <input type="text" id="licenseNumber" placeholder="Optional">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 2: Practice -->
+            <div class="wizard-step" data-step="2">
+                <h2 class="step-title">Practice Information</h2>
+                <p class="step-description">Help us understand your practice</p>
+
+                <form id="step2Form">
+                    <div class="form-group">
+                        <label for="practiceName">Practice Name *</label>
+                        <input type="text" id="practiceName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="practiceAddress">Practice Address *</label>
+                        <input type="text" id="practiceAddress" placeholder="Street Address" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City *</label>
+                            <input type="text" id="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State *</label>
+                            <select id="state" required>
+                                <option value="">Select state</option>
+                                <option value="AL">Alabama</option>
+                                <option value="AK">Alaska</option>
+                                <option value="AZ">Arizona</option>
+                                <option value="AR">Arkansas</option>
+                                <option value="CA">California</option>
+                                <option value="CO">Colorado</option>
+                                <option value="CT">Connecticut</option>
+                                <option value="DE">Delaware</option>
+                                <option value="FL">Florida</option>
+                                <option value="GA">Georgia</option>
+                                <!-- Add all states -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="zipCode">ZIP Code *</label>
+                            <input type="text" id="zipCode" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="timezone">Timezone *</label>
+                            <select id="timezone" required>
+                                <option value="America/New_York">Eastern Time</option>
+                                <option value="America/Chicago">Central Time</option>
+                                <option value="America/Denver">Mountain Time</option>
+                                <option value="America/Los_Angeles">Pacific Time</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="practiceType">Practice Type *</label>
+                        <select id="practiceType" required>
+                            <option value="">Select practice type</option>
+                            <option value="solo">Solo Practice</option>
+                            <option value="group">Group Practice</option>
+                            <option value="clinic">Clinic/Organization</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 3: Services -->
+            <div class="wizard-step" data-step="3">
+                <h2 class="step-title">Your Services</h2>
+                <p class="step-description">Add the services you offer to clients</p>
+
+                <form id="step3Form">
+                    <div class="service-card selected">
+                        <div class="service-card-header">
+                            <div>
+                                <div class="service-card-title">Individual Therapy</div>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">One-on-one counseling sessions</p>
+                            </div>
+                            <div class="service-card-price">$150/session</div>
+                        </div>
+                        <div class="form-row" style="margin-top: 1rem;">
+                            <div class="form-group">
+                                <label>Session Rate ($)</label>
+                                <input type="number" value="150" min="0" step="5">
+                            </div>
+                            <div class="form-group">
+                                <label>Duration (minutes)</label>
+                                <input type="number" value="60" min="15" step="15">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-card-header">
+                            <div>
+                                <div class="service-card-title">Couples Therapy</div>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Relationship counseling</p>
+                            </div>
+                            <input type="checkbox" onclick="toggleServiceCard(this)">
+                        </div>
+                        <div class="form-row" style="margin-top: 1rem; display: none;">
+                            <div class="form-group">
+                                <label>Session Rate ($)</label>
+                                <input type="number" value="200" min="0" step="5">
+                            </div>
+                            <div class="form-group">
+                                <label>Duration (minutes)</label>
+                                <input type="number" value="60" min="15" step="15">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-card-header">
+                            <div>
+                                <div class="service-card-title">Family Therapy</div>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Family counseling sessions</p>
+                            </div>
+                            <input type="checkbox" onclick="toggleServiceCard(this)">
+                        </div>
+                        <div class="form-row" style="margin-top: 1rem; display: none;">
+                            <div class="form-group">
+                                <label>Session Rate ($)</label>
+                                <input type="number" value="200" min="0" step="5">
+                            </div>
+                            <div class="form-group">
+                                <label>Duration (minutes)</label>
+                                <input type="number" value="75" min="15" step="15">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-card-header">
+                            <div>
+                                <div class="service-card-title">Group Therapy</div>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Group counseling sessions</p>
+                            </div>
+                            <input type="checkbox" onclick="toggleServiceCard(this)">
+                        </div>
+                        <div class="form-row" style="margin-top: 1rem; display: none;">
+                            <div class="form-group">
+                                <label>Session Rate ($)</label>
+                                <input type="number" value="75" min="0" step="5">
+                            </div>
+                            <div class="form-group">
+                                <label>Duration (minutes)</label>
+                                <input type="number" value="90" min="15" step="15">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Step 4: Billing -->
+            <div class="wizard-step" data-step="4">
+                <h2 class="step-title">Billing Setup</h2>
+                <p class="step-description">Configure your billing preferences</p>
+
+                <form id="step4Form">
+                    <div class="form-group">
+                        <label>Payment Methods Accepted</label>
+                        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.75rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                                <input type="checkbox" checked>
+                                Credit/Debit Cards (via Stripe)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                                <input type="checkbox" checked>
+                                Cash
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                                <input type="checkbox">
+                                Check
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: normal;">
+                                <input type="checkbox">
+                                HSA/FSA
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="invoiceTerms">Invoice Payment Terms *</label>
+                        <select id="invoiceTerms" required>
+                            <option value="due_on_receipt">Due on Receipt</option>
+                            <option value="net_7">Net 7 Days</option>
+                            <option value="net_15">Net 15 Days</option>
+                            <option value="net_30">Net 30 Days</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lateFeePolicy">Late Fee Policy</label>
+                        <select id="lateFeePolicy">
+                            <option value="none">No Late Fees</option>
+                            <option value="fixed_25">$25 Fixed Fee</option>
+                            <option value="fixed_50">$50 Fixed Fee</option>
+                            <option value="percent_5">5% of Invoice</option>
+                            <option value="percent_10">10% of Invoice</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cancellationPolicy">Cancellation Policy *</label>
+                        <textarea id="cancellationPolicy" rows="4" required placeholder="e.g., 24-hour cancellation notice required. Cancellations made less than 24 hours in advance will be charged the full session fee.">24-hour cancellation notice required. Cancellations made less than 24 hours in advance will be charged the full session fee.</textarea>
+                    </div>
+
+                    <div class="feature-checklist">
+                        <h4>Stripe Client Billing (Included)</h4>
+                        <ul>
+                            <li>Accept credit/debit card payments from clients</li>
+                            <li>Automated invoice generation and delivery</li>
+                            <li>Secure payment processing (PCI compliant)</li>
+                            <li>Send payment links to clients via email/SMS</li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Completion -->
+            <div class="wizard-step" data-step="5">
+                <div class="success-icon">🎉</div>
+                <div class="completion-message">
+                    <h2>You're All Set!</h2>
+                    <p>Your practice is ready to go. Let's get started with Sessionably.</p>
+
+                    <div class="feature-checklist">
+                        <h4>What's Next?</h4>
+                        <ul>
+                            <li>Add your first client</li>
+                            <li>Schedule your first appointment</li>
+                            <li>Create your first invoice</li>
+                            <li>Set up your client portal</li>
+                            <li>Connect Stripe for client payments</li>
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-primary" style="width: 100%;" onclick="completeWizard()">
+                        Go to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="wizard-actions">
+            <button class="btn btn-secondary" id="prevBtn" onclick="previousStep()" style="visibility: hidden;">
+                Previous
+            </button>
+            <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                Next
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+
+        function updateProgress() {
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            const progressPercentage = ((currentStep - 1) / totalSteps) * 100;
+            progressFill.style.width = progressPercentage + '%';
+
+            // Update step indicators
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                const stepNumber = index + 1;
+                step.classList.remove('active', 'completed');
+
+                if (stepNumber < currentStep) {
+                    step.classList.add('completed');
+                    step.querySelector('.progress-step-icon').textContent = '✓';
+                } else if (stepNumber === currentStep) {
+                    step.classList.add('active');
+                    step.querySelector('.progress-step-icon').textContent = stepNumber;
+                } else {
+                    step.querySelector('.progress-step-icon').textContent = stepNumber;
+                }
+            });
+
+            // Update button visibility
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.style.visibility = currentStep > 1 ? 'visible' : 'hidden';
+
+            if (currentStep === totalSteps) {
+                nextBtn.textContent = 'Complete Setup';
+            } else {
+                nextBtn.textContent = 'Next';
+            }
+
+            // Show/hide steps
+            document.querySelectorAll('.wizard-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            document.querySelector(`.wizard-step[data-step="${currentStep}"]`).classList.add('active');
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                // Validate current step
+                const currentForm = document.getElementById(`step${currentStep}Form`);
+                if (currentForm && !currentForm.checkValidity()) {
+                    currentForm.reportValidity();
+                    return;
+                }
+
+                currentStep++;
+                updateProgress();
+            } else if (currentStep === totalSteps) {
+                // Complete the wizard
+                currentStep = 5;
+                document.getElementById('prevBtn').style.display = 'none';
+                document.getElementById('nextBtn').style.display = 'none';
+                document.querySelector('.wizard-step[data-step="4"]').classList.remove('active');
+                document.querySelector('.wizard-step[data-step="5"]').classList.add('active');
+
+                // Update progress to 100%
+                document.getElementById('progressFill').style.width = '100%';
+                document.querySelectorAll('.progress-step').forEach(step => {
+                    step.classList.remove('active');
+                    step.classList.add('completed');
+                    step.querySelector('.progress-step-icon').textContent = '✓';
+                });
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateProgress();
+            }
+        }
+
+        function toggleServiceCard(checkbox) {
+            const card = checkbox.closest('.service-card');
+            const formRow = card.querySelector('.form-row');
+
+            if (checkbox.checked) {
+                card.classList.add('selected');
+                formRow.style.display = 'grid';
+            } else {
+                card.classList.remove('selected');
+                formRow.style.display = 'none';
+            }
+        }
+
+        function completeWizard() {
+            // Save wizard data to localStorage
+            const wizardData = {
+                completed: true,
+                completedDate: new Date().toISOString()
+            };
+            localStorage.setItem('onboardingCompleted', JSON.stringify(wizardData));
+
+            // Redirect to app
+            window.location.href = '/app#dashboard';
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
