@@ -8867,6 +8867,7 @@ function showTab(tab) {
 
     if (tab === 'dashboard') loadDashboard();
     else if (tab === 'clients') renderClients();
+    else if (tab === 'appointments') renderCalendar();
     else if (tab === 'documents') renderDocs();
     else if (tab === 'audit') renderAudit();
     else if (tab === 'ainotetaker') {
@@ -12004,6 +12005,11 @@ async function loadAppointments() {
         }
 
         appointments = result.data || [];
+
+        // Render calendar after loading appointments
+        if (document.getElementById('calendarView')) {
+            renderCalendar();
+        }
     } catch (error) {
         console.error('Error loading appointments:', error);
         // Don't show notification for appointments - might not be critical
@@ -15036,12 +15042,12 @@ function renderAppointmentsList() {
 
 function previousMonth() {
     currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
-    loadAppointments();
+    renderCalendar();
 }
 
 function nextMonth() {
     currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
-    loadAppointments();
+    renderCalendar();
 }
 
 function setCalendarView(view) {
