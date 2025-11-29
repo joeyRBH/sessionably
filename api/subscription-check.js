@@ -5,6 +5,10 @@ const { initDatabase, executeQuery } = require('./utils/database-connection');
 
 /**
  * Subscription Plans Configuration (matches client-side)
+ * Simplified tier model:
+ * - Essential: Basic features only
+ * - Professional: Essential + Telehealth
+ * - Complete: Professional + AI Notes + Multi-clinician
  */
 const SUBSCRIPTION_PLANS = {
   essential: {
@@ -17,8 +21,8 @@ const SUBSCRIPTION_PLANS = {
   professional: {
     id: 'professional',
     features: {
-      aiClinicalNotes: 'addon',
-      integratedTelehealth: 'addon'
+      aiClinicalNotes: false,
+      integratedTelehealth: true
     }
   },
   complete: {
@@ -164,46 +168,28 @@ function checkFeatureAccess(subscription, featureId) {
   // Get feature access from plan
   const featureAccess = plan.features[featureId];
 
-  // Feature not available in this plan
-  if (featureAccess === false || featureAccess === undefined) {
-    return {
-      allowed: false,
-      reason: 'upgrade_required',
-      message: `This feature requires a higher tier subscription`,
-      currentPlan: planId,
-      requiredPlans: ['professional', 'complete']
-    };
-  }
-
-  // Feature requires addon (Professional plan)
-  if (featureAccess === 'addon') {
-    const requiredAddon = getRequiredAddon(featureId);
-
-    if (subscription.selected_addon === requiredAddon) {
-      return {
-        allowed: true,
-        plan: 'professional',
-        addon: requiredAddon,
-        reason: 'addon_selected'
-      };
-    }
-
-    return {
-      allowed: false,
-      reason: 'addon_required',
-      message: `This feature requires the ${requiredAddon} addon`,
-      currentPlan: planId,
-      selectedAddon: subscription.selected_addon,
-      requiredAddon: requiredAddon
-    };
-  }
-
-  // Feature is directly available
+  // Feature is directly available in the plan
   if (featureAccess === true) {
     return {
       allowed: true,
       plan: planId,
       reason: 'plan_feature'
+    };
+  }
+
+  // Feature not available in this plan
+  if (featureAccess === false || featureAccess === undefined) {
+    // Determine required plans based on feature
+    const requiredPlans = featureId === 'aiClinicalNotes'
+      ? ['complete']
+      : ['professional', 'complete'];
+
+    return {
+      allowed: false,
+      reason: 'upgrade_required',
+      message: `This feature requires a higher tier subscription`,
+      currentPlan: planId,
+      requiredPlans: requiredPlans
     };
   }
 

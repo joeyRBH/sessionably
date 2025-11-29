@@ -44,18 +44,15 @@ const SUBSCRIPTION_PLANS = {
       documentStorage: '100GB',
       digitalSignatures: true,
       hipaaCompliant: true,
-      aiClinicalNotes: 'addon', // Requires addon selection
-      integratedTelehealth: 'addon', // Requires addon selection
+      aiClinicalNotes: false, // Not included (Complete only)
+      integratedTelehealth: true, // Included in Professional+
       multiClinician: false,
       storageLimit: 100,
-      prioritySupport: true,
-      addonRequired: true // User must choose ONE addon
+      prioritySupport: true
     },
-    description: 'Everything in Essential + choose AI Notes OR Telehealth',
-    addons: ['ai_notes', 'telehealth'],
+    description: 'Everything in Essential + Telehealth',
     limitations: [
-      'Choose ONE addon: AI Notes OR Telehealth',
-      'Change addon once per billing cycle',
+      'No AI-powered clinical notes',
       '100GB storage'
     ]
   },
@@ -93,11 +90,10 @@ const FEATURES = {
     name: 'AI-Powered Clinical Notes',
     description: 'Generate comprehensive clinical notes with AI assistance',
     icon: '🤖',
-    requiredPlans: ['professional', 'complete'],
-    addonKey: 'ai_notes',
+    requiredPlans: ['complete'],
     upgradeMessage: {
-      essential: 'Upgrade to Professional or Complete Suite to unlock AI-powered clinical notes',
-      professional: 'Select AI Notes as your Professional addon to use this feature'
+      essential: 'Upgrade to Complete Suite to unlock AI-powered clinical notes',
+      professional: 'Upgrade to Complete Suite to unlock AI-powered clinical notes'
     }
   },
 
@@ -107,10 +103,9 @@ const FEATURES = {
     description: 'Conduct secure video sessions directly within the platform',
     icon: '📹',
     requiredPlans: ['professional', 'complete'],
-    addonKey: 'telehealth',
     upgradeMessage: {
       essential: 'Upgrade to Professional or Complete Suite to unlock telehealth capabilities',
-      professional: 'Select Telehealth as your Professional addon to use this feature'
+      professional: 'Included in your plan'
     }
   }
 };
@@ -181,53 +176,22 @@ const SubscriptionHelpers = {
       return { allowed: false, reason: 'Feature not found' };
     }
 
-    // Complete Suite has access to everything
-    if (subscription.planId === 'complete') {
-      return { allowed: true, plan: 'complete' };
+    // Get feature value from plan
+    const featureValue = plan.features[featureId];
+
+    // Feature is directly available in the plan
+    if (featureValue === true) {
+      return { allowed: true, plan: subscription.planId };
     }
 
-    // Essential plan check
-    if (subscription.planId === 'essential') {
-      if (!plan.features[featureId]) {
-        return {
-          allowed: false,
-          reason: 'upgrade_required',
-          message: feature.upgradeMessage.essential,
-          requiredPlans: feature.requiredPlans
-        };
-      }
-    }
-
-    // Professional plan check
-    if (subscription.planId === 'professional') {
-      const featureValue = plan.features[featureId];
-
-      // If feature requires addon
-      if (featureValue === 'addon') {
-        const addon = ADDONS[feature.addonKey];
-
-        // Check if user has selected this addon
-        if (subscription.selectedAddon === feature.addonKey) {
-          return { allowed: true, plan: 'professional', addon: feature.addonKey };
-        }
-
-        return {
-          allowed: false,
-          reason: 'addon_required',
-          message: feature.upgradeMessage.professional,
-          availableAction: 'select_addon'
-        };
-      }
-
-      // Feature is directly available
-      if (featureValue === true) {
-        return { allowed: true, plan: 'professional' };
-      }
-
+    // Feature not available in this plan
+    if (featureValue === false || featureValue === undefined) {
+      const message = feature.upgradeMessage[subscription.planId] || feature.upgradeMessage.essential;
       return {
         allowed: false,
-        reason: 'feature_not_available',
-        message: feature.upgradeMessage.professional
+        reason: 'upgrade_required',
+        message: message,
+        requiredPlans: feature.requiredPlans
       };
     }
 
@@ -244,47 +208,33 @@ const SubscriptionHelpers = {
     const subscription = this.getCurrentSubscription();
     const options = [];
 
+    // Essential users can upgrade to Professional or Complete
     if (subscription.planId === 'essential') {
-      // Can upgrade to Professional or Complete
-      options.push({
-        plan: 'professional',
-        name: 'Professional',
-        price: SUBSCRIPTION_PLANS.professional.price,
-        note: 'Includes this feature as an addon option'
-      });
+      // For Telehealth: Professional or Complete
+      if (featureId === 'integratedTelehealth') {
+        options.push({
+          plan: 'professional',
+          name: 'Professional',
+          price: SUBSCRIPTION_PLANS.professional.price,
+          note: 'Includes Telehealth'
+        });
+      }
+
+      // For AI Notes or any feature: Complete
       options.push({
         plan: 'complete',
         name: 'Complete Suite',
         price: SUBSCRIPTION_PLANS.complete.price,
-        note: 'Includes everything'
+        note: 'Includes everything: AI Notes + Telehealth'
       });
-    } else if (subscription.planId === 'professional') {
-      const addon = ADDONS[feature.addonKey];
-
-      // If addon not selected, can select it
-      if (!subscription.selectedAddon) {
-        options.push({
-          action: 'select_addon',
-          addon: feature.addonKey,
-          name: `Select ${addon.name} addon`,
-          note: 'Included in your Professional plan'
-        });
-      } else if (subscription.selectedAddon !== feature.addonKey) {
-        // Can change addon or upgrade to Complete
-        options.push({
-          action: 'change_addon',
-          addon: feature.addonKey,
-          name: `Switch to ${addon.name} addon`,
-          note: 'Change once per billing cycle'
-        });
-      }
-
-      // Can always upgrade to Complete
+    }
+    // Professional users can only upgrade to Complete
+    else if (subscription.planId === 'professional') {
       options.push({
         plan: 'complete',
         name: 'Upgrade to Complete Suite',
         price: SUBSCRIPTION_PLANS.complete.price,
-        note: 'Get both AI Notes and Telehealth'
+        note: 'Add AI Notes and Multi-clinician support'
       });
     }
 

@@ -8390,30 +8390,19 @@ function updateNavigationForSubscription() {
     const telehealthBtn = document.getElementById('telehealthNavBtn');
     const aiNoteTakerBtn = document.getElementById('aiNoteTakerNavBtn');
 
-    // Telehealth: Professional or Complete
-    // For Professional: only show if telehealth addon is selected
-    // For Complete: always show
+    // Telehealth: Professional or Complete (Professional+)
     if (telehealthBtn) {
-        if (subscription.planId === 'complete') {
-            telehealthBtn.style.display = 'block';
-        } else if (subscription.planId === 'professional' && subscription.selectedAddon === 'telehealth') {
-            telehealthBtn.style.display = 'block';
-        } else {
-            telehealthBtn.style.display = 'none';
-        }
+        telehealthBtn.style.display =
+            (subscription.planId === 'professional' ||
+             subscription.planId === 'complete')
+            ? 'block' : 'none';
     }
 
     // AI NoteTaker: Complete only
-    // For Professional: only show if ai_notes addon is selected
-    // For Complete: always show
     if (aiNoteTakerBtn) {
-        if (subscription.planId === 'complete') {
-            aiNoteTakerBtn.style.display = 'block';
-        } else if (subscription.planId === 'professional' && subscription.selectedAddon === 'ai_notes') {
-            aiNoteTakerBtn.style.display = 'block';
-        } else {
-            aiNoteTakerBtn.style.display = 'none';
-        }
+        aiNoteTakerBtn.style.display =
+            subscription.planId === 'complete'
+            ? 'block' : 'none';
     }
 }
 
