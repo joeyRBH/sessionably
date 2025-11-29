@@ -1,0 +1,22 @@
+/* ================================
+   MESSAGES FEATURE - CSS STYLES
+   Archived from app.html
+   ================================
+
+   NOTE: The Messages feature primarily uses inline styles and general-purpose CSS classes
+   from the main application stylesheet. No specific dedicated CSS was found for this feature.
+
+   The feature relies on existing classes such as:
+   - .tab-content
+   - .content-header
+   - .card
+   - .btn
+   - .btn-primary
+   - .btn-secondary
+   - .input
+   - .notification-badge
+   - .conversation-item
+
+   All styles are either inline or defined in the main application stylesheet and
+   shared across multiple features.
+*/

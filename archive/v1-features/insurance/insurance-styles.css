@@ -1,0 +1,33 @@
+/* ================================
+   INSURANCE FEATURE - CSS STYLES
+   Archived from app.html
+   ================================
+
+   NOTE: The Insurance feature primarily uses inline styles and general-purpose CSS classes
+   from the main application stylesheet. No specific dedicated CSS was found for this feature.
+
+   The feature relies on existing classes such as:
+   - .tab-content
+   - .content-header
+   - .card
+   - .btn
+   - .btn-primary
+   - .input
+   - .analytics-grid
+   - .stat-card
+   - .stat-number
+   - .settings-tabs
+   - .settings-tab-btn
+   - .insurance-tab-content
+   - .form-group
+   - .settings-description
+   - .modal
+   - .modal-content
+   - .modal-header
+   - .modal-body
+   - .modal-footer
+   - .status-badge
+   - .settings-table
+
+   These are all defined in the main application styles and are shared across multiple features.
+*/

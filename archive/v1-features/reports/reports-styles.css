@@ -1,0 +1,27 @@
+/* ================================
+   REPORTS FEATURE - CSS STYLES
+   Archived from app.html
+   ================================
+
+   NOTE: The Reports feature primarily uses inline styles and general-purpose CSS classes
+   from the main application stylesheet. No specific dedicated CSS was found for this feature.
+
+   The feature relies on existing classes such as:
+   - .tab-content
+   - .content-header
+   - .card
+   - .btn
+   - .input
+   - .report-preview
+   - .report-header
+   - .report-section
+   - .stats-grid
+   - .stat-card
+   - .stat-number
+   - .report-table
+   - .status-badge
+   - .loading
+   - .error
+
+   These are all defined in the main application styles and are shared across multiple features.
+*/
