@@ -83,7 +83,7 @@ Before deploying to production:
 |------|-----------|-----------|----------|
 | Essential | N/A | $40/month | price_essential_40 |
 | Professional | N/A | $60/month | price_professional_60 |
-| Complete Suite | $80/month | $75/month | price_complete_75 |
+| Complete Suite | $80/month | $75/month | price_1SYgtO3acP2PN3DD2D7RFymH |
 
 ## Notes
 
