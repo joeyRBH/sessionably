@@ -63,8 +63,8 @@ const SUBSCRIPTION_PLANS = {
   complete: {
     id: 'complete',
     name: 'Complete Suite',
-    price: 80,
-    priceId: 'price_complete_80', // TODO: Update with actual Stripe Price ID
+    price: 75,
+    priceId: 'price_complete_75', // TODO: Update with actual Stripe Price ID
     features: {
       clientManagement: true,
       appointmentScheduling: true,
