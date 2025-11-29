@@ -388,7 +388,7 @@
         status: 'active',
         selectedAddon: null
       });
-      console.log('✅ Set to Professional plan (no addon selected)');
+      console.log('✅ Set to Professional plan (includes Telehealth)');
       window.location.reload();
     },
 
@@ -403,17 +403,9 @@
     },
 
     setAddon(addonId) {
-      const subscription = window.SubscriptionHelpers.getCurrentSubscription();
-      if (subscription.planId !== 'professional') {
-        console.error('❌ Addons only work with Professional plan. Run testProfessional() first.');
-        return;
-      }
-      window.SubscriptionHelpers.updateSubscription({
-        selectedAddon: addonId,
-        addonChangedThisCycle: false
-      });
-      console.log(`✅ Set addon to: ${addonId}`);
-      window.location.reload();
+      console.warn('⚠️ Addons are deprecated in the simplified tier model.');
+      console.log('Professional plan now includes Telehealth by default.');
+      console.log('AI Notes are only available in the Complete plan.');
     },
 
     showCurrentPlan() {
