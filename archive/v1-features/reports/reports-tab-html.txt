@@ -1,0 +1,40 @@
+REPORTS FEATURE - HTML CONTENT
+================================
+
+NAVIGATION BUTTON (Line 4660-4662):
+------------------------------------
+<button class="tab-btn" onclick="showTab('reports')" data-translate="Reports">
+    Reports
+</button>
+
+
+CONTENT SECTION (Line 5715-5742):
+----------------------------------
+<div id="reportsContent" class="tab-content">
+    <div class="content-header">
+        <h2>Reports & Analytics</h2>
+        <div>
+            <select id="reportType" class="input" style="width: auto; margin-right: 10px;" onchange="generateReport()">
+                <option value="client-summary">Client Summary</option>
+                <option value="appointment-trends">Appointment Trends</option>
+                <option value="revenue-report">Revenue Report</option>
+                <option value="payment-history">Payment History</option>
+                <option value="document-completion">Document Completion</option>
+            </select>
+            <button class="btn" onclick="exportReport()">📥 Export PDF</button>
+        </div>
+    </div>
+    <div id="reportContent">
+        <div class="card">
+            <h3>Report Generator</h3>
+            <p>Select a report type above to generate detailed analytics and insights for your practice.</p>
+            <div class="report-preview" style="display: none;">
+                <div class="report-header">
+                    <h4 id="reportTitle"></h4>
+                    <p id="reportDate"></p>
+                </div>
+                <div id="reportData"></div>
+            </div>
+        </div>
+    </div>
+</div>

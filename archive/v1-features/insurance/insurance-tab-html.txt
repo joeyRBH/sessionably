@@ -1,0 +1,155 @@
+INSURANCE FEATURE - HTML CONTENT
+==================================
+
+NAVIGATION BUTTON (Line 4663-4665):
+------------------------------------
+<button class="tab-btn" onclick="showTab('insurance')" data-translate="Insurance">
+    Insurance
+</button>
+
+
+CONTENT SECTION (Line 5744-5880):
+----------------------------------
+<div id="insuranceContent" class="tab-content">
+    <div class="content-header">
+        <h2>Insurance Management</h2>
+        <div>
+            <button class="btn btn-primary" onclick="openVerifyBenefits()">🔍 Verify Benefits</button>
+            <button class="btn btn-primary" onclick="openSubmitClaim()">📤 Submit Claim</button>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="analytics-grid" style="margin-bottom: 24px;">
+        <div class="stat-card">
+            <h3>Pending Claims</h3>
+            <div class="stat-number" id="pendingClaimsCount">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Approved Claims</h3>
+            <div class="stat-number" id="approvedClaimsCount">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Denied Claims</h3>
+            <div class="stat-number" id="deniedClaimsCount">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Total Claimed</h3>
+            <div class="stat-number" id="totalClaimedAmount">$0.00</div>
+        </div>
+    </div>
+
+    <!-- Tabs for different sections -->
+    <div class="settings-tabs" style="margin-bottom: 20px;">
+        <button class="settings-tab-btn active" onclick="showInsuranceTab('claims')">📋 Claims</button>
+        <button class="settings-tab-btn" onclick="showInsuranceTab('verification')">✓ Verifications</button>
+        <button class="settings-tab-btn" onclick="showInsuranceTab('settings')">⚙️ Settings</button>
+    </div>
+
+    <!-- Claims Tab -->
+    <div id="insuranceClaimsTab" class="insurance-tab-content">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>Claims History</h3>
+                <div>
+                    <select id="claimStatusFilter" class="input" style="width: auto; margin-right: 10px;" onchange="filterClaims()">
+                        <option value="">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="submitted">Submitted</option>
+                        <option value="approved">Approved</option>
+                        <option value="denied">Denied</option>
+                        <option value="resubmitted">Resubmitted</option>
+                    </select>
+                    <button class="btn" onclick="loadClaims()">🔄 Refresh</button>
+                </div>
+            </div>
+            <div id="claimsList">
+                <!-- Claims will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Tab -->
+    <div id="insuranceVerificationTab" class="insurance-tab-content" style="display: none;">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>Benefit Verifications</h3>
+                <button class="btn" onclick="loadVerifications()">🔄 Refresh</button>
+            </div>
+            <div id="verificationsList">
+                <!-- Verifications will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Tab -->
+    <div id="insuranceSettingsTab" class="insurance-tab-content" style="display: none;">
+        <div class="card">
+            <h3>Availity API Configuration</h3>
+            <p class="settings-description">
+                Configure your Availity API credentials to enable real-time insurance verification and claims submission.
+                <a href="https://developer.availity.com" target="_blank" rel="noopener">Get API credentials →</a>
+            </p>
+            <div class="form-group">
+                <label for="availityClientId">Client ID:</label>
+                <input type="text" id="availityClientId" class="input" placeholder="Enter your Availity Client ID">
+            </div>
+            <div class="form-group">
+                <label for="availityClientSecret">Client Secret:</label>
+                <input type="password" id="availityClientSecret" class="input" placeholder="Enter your Availity Client Secret">
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="availityTestMode" checked>
+                    Use Test Mode (Sandbox)
+                </label>
+            </div>
+            <button class="btn btn-primary" onclick="saveInsuranceSettings()">💾 Save Settings</button>
+            <button class="btn" onclick="testAvailityConnection()">🔧 Test Connection</button>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <h3>Default Claim Settings</h3>
+            <div class="form-group">
+                <label for="defaultPlaceOfService">Place of Service:</label>
+                <select id="defaultPlaceOfService" class="input">
+                    <option value="11">11 - Office</option>
+                    <option value="02">02 - Telehealth</option>
+                    <option value="12">12 - Home</option>
+                    <option value="22">22 - On Campus-Outpatient Hospital</option>
+                    <option value="99">99 - Other Place of Service</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="defaultBillingProvider">Billing Provider NPI:</label>
+                <input type="text" id="defaultBillingProvider" class="input" placeholder="10-digit NPI">
+            </div>
+            <div class="form-group">
+                <label for="defaultTaxonomy">Provider Taxonomy Code:</label>
+                <input type="text" id="defaultTaxonomy" class="input" placeholder="e.g., 103T00000X (Psychologist)">
+            </div>
+            <button class="btn btn-primary" onclick="saveDefaultClaimSettings()">💾 Save Defaults</button>
+        </div>
+
+        <div class="card" style="margin-top: 20px; background: #dbeafe; border-left: 4px solid #3b82f6;">
+            <h4 style="margin: 0 0 10px 0; color: #1e40af;">About Availity Integration</h4>
+            <p style="margin: 0 0 10px 0; color: #1e3a8a;">
+                Availity is a leading healthcare clearinghouse that provides free claims submission and eligibility verification
+                for thousands of insurance payers nationwide.
+            </p>
+            <ul style="margin: 0; padding-left: 20px; color: #1e3a8a;">
+                <li>Free Essentials plan available</li>
+                <li>Real-time eligibility checks (270/271 transactions)</li>
+                <li>Electronic claims submission (837 transactions)</li>
+                <li>Claim status inquiries (276/277 transactions)</li>
+                <li>Support for major payers including Anthem, BCBS, Aetna, UnitedHealth, and more</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+API FILES (if exists):
+---------------------
+- /api/insurance-claims.js
+- /api/insurance-verification.js
