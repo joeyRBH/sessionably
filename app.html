@@ -4631,16 +4631,14 @@
                 <button class="tab-btn" onclick="showTab('clients')" data-translate="Clients">
                     Clients
                 </button>
-                <!-- ARCHIVED: Messages Feature -->
-                <!--
-                <button class="tab-btn" onclick="showTab('messages')">
-                    <span data-translate="Messages">Messages</span>
-                    <span class="notification-badge" id="messagesBadge" style="display: none;">0</span>
-                </button>
-                -->
                 <button class="tab-btn" onclick="showTab('appointments')" data-translate="Appointments">
                     Appointments
                 </button>
+                <!-- Telehealth: Professional+ (Professional or Complete plans) -->
+                <button class="tab-btn" id="telehealthNavBtn" onclick="showTab('telehealth')" style="display: none;">
+                    Telehealth
+                </button>
+                <!-- AI NoteTaker: Complete only -->
                 <button class="tab-btn" id="aiNoteTakerNavBtn" onclick="showTab('ainotetaker')" style="display: none;">
                     AI NoteTaker
                 </button>
@@ -4651,27 +4649,9 @@
                 <button class="tab-btn" onclick="showTab('invoices')">
                     Billing
                 </button>
-                <button class="tab-btn" onclick="showTab('analytics')">
-                    Analytics
-                </button>
                 <button class="tab-btn" onclick="showTab('settings')" data-translate="Settings">
                     Settings
                 </button>
-                <button class="tab-btn" onclick="showTab('audit')">
-                    Audit Log
-                </button>
-                <!-- ARCHIVED: Reports Feature -->
-                <!--
-                <button class="tab-btn" onclick="showTab('reports')" data-translate="Reports">
-                    Reports
-                </button>
-                -->
-                <!-- ARCHIVED: Insurance Feature -->
-                <!--
-                <button class="tab-btn" onclick="showTab('insurance')" data-translate="Insurance">
-                    Insurance
-                </button>
-                -->
             </div>
         </div>
 
@@ -8396,6 +8376,44 @@ function updateSubscriptionStatus() {
         daysLeftElement.textContent = 'Active subscription';
     } else {
         statusElement.style.display = 'none';
+    }
+}
+
+// Update navigation based on subscription plan
+function updateNavigationForSubscription() {
+    const subscription = window.SubscriptionHelpers?.getCurrentSubscription() || {
+        planId: 'essential',
+        status: 'active',
+        selectedAddon: null
+    };
+
+    const telehealthBtn = document.getElementById('telehealthNavBtn');
+    const aiNoteTakerBtn = document.getElementById('aiNoteTakerNavBtn');
+
+    // Telehealth: Professional or Complete
+    // For Professional: only show if telehealth addon is selected
+    // For Complete: always show
+    if (telehealthBtn) {
+        if (subscription.planId === 'complete') {
+            telehealthBtn.style.display = 'block';
+        } else if (subscription.planId === 'professional' && subscription.selectedAddon === 'telehealth') {
+            telehealthBtn.style.display = 'block';
+        } else {
+            telehealthBtn.style.display = 'none';
+        }
+    }
+
+    // AI NoteTaker: Complete only
+    // For Professional: only show if ai_notes addon is selected
+    // For Complete: always show
+    if (aiNoteTakerBtn) {
+        if (subscription.planId === 'complete') {
+            aiNoteTakerBtn.style.display = 'block';
+        } else if (subscription.planId === 'professional' && subscription.selectedAddon === 'ai_notes') {
+            aiNoteTakerBtn.style.display = 'block';
+        } else {
+            aiNoteTakerBtn.style.display = 'none';
+        }
     }
 }
 
@@ -18845,11 +18863,8 @@ document.addEventListener('DOMContentLoaded', function() {
     applyTheme(theme);
     applyLanguage(language);
 
-    // Initialize feature flags
-    if (FEATURE_FLAGS.AI_NOTETAKER_ENABLED) {
-        const aiNavBtn = document.getElementById('aiNoteTakerNavBtn');
-        if (aiNavBtn) aiNavBtn.style.display = 'inline-block';
-    }
+    // Initialize navigation based on subscription
+    updateNavigationForSubscription();
 
     // Check for active session first
     const hasActiveSession = checkSession();
