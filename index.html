@@ -883,7 +883,7 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <h1>Developed by a clinician. Helping you to provide care...</h1>
+        <h1>Developed by a clinician. Helping to provide care sessionably</h1>
         <p>Spend more time with clients and less time on administrative work. AI-powered notes, seamless billing, and a system so intuitive your most tech-resistant colleague will actually use it. Starting at just $40/month.</p>
 
         <div class="hero-cta">
@@ -1040,8 +1040,7 @@
 
             <!-- Stripe Pricing Table -->
             <div style="margin: 3rem 0;">
-                <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
-                <stripe-pricing-table 
+                <stripe-pricing-table
                     pricing-table-id="prctbl_1SX4sA3acP2PN3DDoKRjYZsx"
                     publishable-key="pk_live_51SJ5Q33acP2PN3DDzxe38FSvitjiFiMTijiznVmrMtxQ3FXBKSqdHzBY5OnvRZ7CgRpQS3KlX817TthhFFx5AEEH00jbEPbLTn">
                 </stripe-pricing-table>
@@ -1319,4 +1318,18 @@
 
         document.getElementById('contactModal').addEventListener('click', function(e) {
             if (e.target === this) {
-                closeContactM
+                closeContactModal();
+            }
+        });
+
+        document.getElementById('signupModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSignupModal();
+            }
+        });
+    </script>
+
+    <!-- Stripe Pricing Table Script -->
+    <script async src="https://js.stripe.com/v3/pricing-table.js"></script>
+</body>
+</html>
