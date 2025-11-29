@@ -11811,6 +11811,48 @@ This is an automated invoice. Please contact our office with any questions.
 
 // SMS Appointment Reminder Functions
 async function scheduleAppointmentSMSReminder(appointment) {
+    // ADD THIS VALIDATING BLOCK AT THE START
+    // 1. Check appointment object exists
+    if (!appointment) {
+        console.error('No appointment provided to SMS scheduler');
+        return;
+    }
+
+    // 2. Get and validate the date
+    let appointmentDateTime;
+    const appointmentDate = appointment.appointmentDate || appointment.appointment_date;
+    const appointmentTime = appointment.appointmentTime || appointment.appointment_time;
+
+    if (appointment.dateTime) {
+        appointmentDateTime = new Date(appointment.dateTime);
+    } else if (appointmentDate && appointmentTime) {
+        appointmentDateTime = new Date(`${appointmentDate}T${appointmentTime}`);
+    } else {
+        console.error('Appointment missing date/time:', appointment);
+        return;
+    }
+
+    // 3. Validate date is valid before using
+    if (isNaN(appointmentDateTime.getTime())) {
+        console.error('Invalid appointment date -', appointment);
+        return; // Exit early - don't try to schedule
+    }
+
+    // 4. Now safe to format the date for SMS
+    const formattedDate = appointmentDateTime.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric'
+    });
+    const formattedTime = appointmentDateTime.toLocaleTimeString('en-US', {
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true
+    });
+
+    console.log('📅 SMS scheduled for:', formattedDate, formattedTime);
+    // ... rest of SMS scheduling logic ...
+
     try {
         console.log('📱 Scheduling SMS reminder for appointment:', appointment.id);
 
@@ -11818,19 +11860,19 @@ async function scheduleAppointmentSMSReminder(appointment) {
         const clientId = appointment.clientId || appointment.client_id;
         const client = clients.find(c => c.id == clientId);
         if (!client || !client.phone) {
-            console.log('❌ Client phone not found - SMS reminder not scheduled:', { 
-                client: client?.name, 
-                phone: client?.phone 
+            console.log('❌ Client phone not found - SMS reminder not scheduled:', {
+                client: client?.name,
+                phone: client?.phone
             });
             return;
         }
-        
+
         console.log('📱 Client found for SMS:', { name: client.name, phone: client.phone });
 
         // Format phone number for SMS (ensure it starts with +)
         let phoneNumber = client.phone.trim();
         console.log('📱 Original phone number:', phoneNumber);
-        
+
         if (!phoneNumber.startsWith('+')) {
             // Assume US number if no country code
             phoneNumber = phoneNumber.replace(/\D/g, ''); // Remove non-digits
@@ -11840,29 +11882,13 @@ async function scheduleAppointmentSMSReminder(appointment) {
                 phoneNumber = '+' + phoneNumber;
             }
         }
-        
+
         console.log('📱 Formatted phone number:', phoneNumber);
 
-        // Handle both camelCase (from database) and snake_case (from frontend) field names
-        const appointmentDate = appointment.appointmentDate || appointment.appointment_date;
-        const appointmentTime = appointment.appointmentTime || appointment.appointment_time;
-
-        const appointmentDateTime = new Date(appointmentDate + 'T' + appointmentTime);
         const reminderDateTime = new Date(appointmentDateTime.getTime() - (24 * 60 * 60 * 1000)); // 24 hours before
 
         console.log('📱 Appointment datetime:', appointmentDateTime.toLocaleString());
         console.log('📱 Reminder scheduled for:', reminderDateTime.toLocaleString());
-        
-        const formattedDate = appointmentDateTime.toLocaleDateString('en-US', { 
-            weekday: 'long', 
-            month: 'long', 
-            day: 'numeric' 
-        });
-        const formattedTime = appointmentDateTime.toLocaleTimeString('en-US', { 
-            hour: 'numeric', 
-            minute: '2-digit',
-            hour12: true 
-        });
 
         // Remove PHI - no client name, just appointment details
         const message = `Reminder: You have an appointment scheduled for ${formattedDate} at ${formattedTime}. Please arrive 10 minutes early. Reply STOP to opt out.`;
@@ -14649,8 +14675,13 @@ function checkAINoteTakerSubscription() {
 function loadTodayAppointments() {
     const today = new Date().toISOString().split('T')[0];
     const todayAppointments = appointments.filter(apt => {
-        const aptDate = apt.appointment_date.split('T')[0];
-        return aptDate === today;
+        // Validate date before accessing
+        const aptDateValue = apt.appointment_date || apt.date;
+        if (!aptDateValue) return false;
+        const aptDate = new Date(aptDateValue);
+        if (isNaN(aptDate.getTime())) return false;
+        const aptDateStr = aptDateValue.split('T')[0];
+        return aptDateStr === today;
     });
 
     const container = document.getElementById('todayAppointmentsList');
@@ -14836,8 +14867,18 @@ function renderMonthView(calendar, monthNames) {
         
         const dateString = currentDate.toISOString().split('T')[0];
         const dayAppointments = appointments.filter(apt => {
-            const aptDate = apt.appointment_date.split('T')[0];
-            return aptDate === dateString;
+            // Validate date before accessing
+            const aptDateValue = apt.appointment_date || apt.date;
+            if (!aptDateValue) {
+                return false; // Skip appointments with no date
+            }
+            const aptDate = new Date(aptDateValue);
+            if (isNaN(aptDate.getTime())) {
+                return false; // Skip this appointment - invalid date
+            }
+            // Safe to access - date is valid
+            const aptDateStr = aptDateValue.split('T')[0];
+            return aptDateStr === dateString;
         });
         
         let classes = 'calendar-day';
@@ -14950,7 +14991,12 @@ function renderWeekView(calendar, monthNames) {
         hours.forEach(hour => {
             const timeSlot = `${hour.toString().padStart(2, '0')}:00`;
             const slotAppointments = appointments.filter(apt => {
-                const aptDate = apt.appointment_date.split('T')[0];
+                // Validate date before accessing
+                const aptDateValue = apt.appointment_date || apt.date;
+                if (!aptDateValue) return false;
+                const aptDateCheck = new Date(aptDateValue);
+                if (isNaN(aptDateCheck.getTime())) return false;
+                const aptDate = aptDateValue.split('T')[0];
                 return aptDate === dateString && apt.time === timeSlot;
             });
             
@@ -14974,11 +15020,16 @@ function renderWeekView(calendar, monthNames) {
 
 function renderDayView(calendar, monthNames) {
     const dateString = currentCalendarDate.toISOString().split('T')[0];
-    document.getElementById('currentMonth').textContent = 
+    document.getElementById('currentMonth').textContent =
         `${monthNames[currentCalendarDate.getMonth()]} ${currentCalendarDate.getDate()}, ${currentCalendarDate.getFullYear()}`;
-    
+
     const dayAppointments = appointments.filter(apt => {
-        const aptDate = apt.appointment_date.split('T')[0];
+        // Validate date before accessing
+        const aptDateValue = apt.appointment_date || apt.date;
+        if (!aptDateValue) return false;
+        const aptDateCheck = new Date(aptDateValue);
+        if (isNaN(aptDateCheck.getTime())) return false;
+        const aptDate = aptDateValue.split('T')[0];
         return aptDate === dateString;
     }).sort((a, b) => a.time.localeCompare(b.time));
     
@@ -15175,9 +15226,10 @@ function editAppointment(appointmentId) {
     }
     
     console.log('Found appointment:', appointment);
-    
-    // Format date for input (YYYY-MM-DD)
-    const dateValue = appointment.appointment_date.split('T')[0];
+
+    // Format date for input (YYYY-MM-DD) - validate before accessing
+    const aptDateValue = appointment.appointment_date || appointment.date || '';
+    const dateValue = aptDateValue ? aptDateValue.split('T')[0] : '';
     
     // Populate edit form
     const clientSelect = document.getElementById('appointmentClient');
@@ -16167,6 +16219,26 @@ function openNewAppointment() {
     document.getElementById('newAppointmentModal').style.display = 'block';
 }
 
+// FIXED CODE - Add this date validation function
+function parseAppointmentDateTime(dateStr, timeStr) {
+    // Validate inputs exist
+    if (!dateStr || !timeStr) {
+        console.error('Missing date or time:', { dateStr, timeStr });
+        return null;
+    }
+
+    // Parse the date
+    const dateTime = new Date(`${dateStr}T${timeStr}`);
+
+    // Validate the result is a valid date
+    if (isNaN(dateTime.getTime())) {
+        console.error('Invalid date created:', { dateStr, timeStr });
+        return null;
+    }
+
+    return dateTime;
+}
+
 async function saveAppointment() {
     console.log('💾 Saving appointment...');
 
@@ -16262,11 +16334,29 @@ async function saveAppointment() {
 
         await logAudit('create_appointment', { id: result.data.id, client_id: appointmentData.client_id });
 
-        // Schedule SMS reminder
-        try {
-            await scheduleAppointmentSMSReminder(result.data);
-        } catch (smsError) {
-            console.error('Error scheduling SMS reminder:', smsError);
+        // Schedule SMS reminder - validate date before calling
+        const appointmentDateTime = parseAppointmentDateTime(
+            appointmentData.appointment_date,
+            appointmentData.appointment_time
+        );
+
+        if (appointmentDateTime) {
+            // Safe to format the date for SMS
+            const formattedDate = appointmentDateTime.toLocaleDateString('en-US', {
+                weekday: 'long', month: 'long', day: 'numeric'
+            });
+            const formattedTime = appointmentDateTime.toLocaleTimeString('en-US', {
+                hour: 'numeric', minute: '2-digit', hour12: true
+            });
+            console.log('📅 SMS scheduled for:', formattedDate, formattedTime);
+
+            try {
+                await scheduleAppointmentSMSReminder(result.data);
+            } catch (smsError) {
+                console.error('Error scheduling SMS reminder:', smsError);
+            }
+        } else {
+            console.error('Invalid date - SMS reminder not scheduled');
         }
 
         showNotification('Appointment saved successfully!', 'success');
