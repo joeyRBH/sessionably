@@ -14865,8 +14865,8 @@ function initializeCalendarClickHandlers() {
 
 // ADD THIS: Render appointments on calendar
 function renderAppointmentsOnCalendar() {
-    // Get appointments from state/storage
-    const storedAppts = JSON.parse(localStorage.getItem('appointments') || '[]');
+    // Get appointments from global state (loaded via loadAppointments from API)
+    const storedAppts = appointments || [];
 
     console.log('📅 Rendering appointments:', storedAppts.length);
 
