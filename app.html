@@ -2254,8 +2254,17 @@
             position: relative;
             color: #000000;
         }
-        .calendar-day:hover {
-            background: rgba(15, 76, 129, 0.05);
+        .calendar-day:hover,
+        .calendar-day:hover .day-cell:hover {
+            background: #f8f8f8;
+            cursor: pointer;
+        }
+        .calendar-day-hover,
+        .day-cell:hover {
+            background: #f8f8f8;
+        }
+        .has-appointment-dot {
+            background: #6666ff !important;
         }
         .calendar-day.other-month {
             color: #ccc;
@@ -14813,11 +14822,99 @@ function viewAppointmentDetail(appointmentId) {
     showAppointmentDetail();
 }
 
+// ADD THIS: Calendar day click handler with event delegation
+// Place this in DOMContentLoaded or after calendar renders
+function initializeCalendarClickHandlers() {
+    // Use event delegation on the calendar container
+    const calendarGrid = document.querySelector('.calendar-grid') ||
+                        document.querySelector('#calendar-grid') ||
+                        document.querySelector('.calendar-days') ||
+                        document.querySelector('#calendarView');
+
+    if (!calendarGrid) {
+        console.error('Calendar grid element not found');
+        return;
+    }
+
+    console.log('📅 Initializing calendar click handlers');
+
+    // Remove existing listeners to prevent duplicates
+    const newGrid = document.querySelector('.calendar-grid') ||
+                   document.querySelector('#calendarView .calendar-grid') ||
+                   document.querySelector('.calendar-days');
+
+    // Add click listener with event delegation
+    newGrid.addEventListener('click', function(e) {
+        // Find the day cell (might be the target or a parent)
+        const dayCell = e.target.closest('[data-date]') ||
+                       e.target.closest('.calendar-day');
+
+        if (dayCell) {
+            const date = dayCell.getAttribute('data-date');
+            console.log('📆 Day clicked:', date);
+            if (date) {
+                // Do whatever your click function is called:
+                // openAppointmentForm(date);
+                showDayAppointments(date);
+            }
+        }
+    });
+
+    console.log('✅ Calendar click handlers initialized');
+}
+
+// ADD THIS: Render appointments on calendar
+function renderAppointmentsOnCalendar() {
+    // Get appointments from state/storage
+    const storedAppts = JSON.parse(localStorage.getItem('appointments') || '[]');
+
+    console.log('📅 Rendering appointments:', storedAppts.length);
+
+    // Clear existing appointment indicators
+    document.querySelectorAll('.calendar-day').forEach(el => {
+        el.classList.remove('has-appointment');
+    });
+    document.querySelectorAll('.appointment-dot').forEach(el => {
+        el.remove();
+    });
+
+    storedAppts.forEach(apt => {
+        // Parse the date - handle multiple formats
+        let dateStr = apt.appointment_date || apt.date || apt.datetime;
+        if (!dateStr) return;
+
+        // Extract YYYY-MM-DD from ISO or date string
+        let dateKey;
+        if (dateStr.includes('T')) {
+            dateKey = dateStr.split('T')[0]; // '2025-11-30T00:00:00' -> '2025-11-30'
+        } else {
+            dateKey = dateStr; // Already '2025-11-30'
+        }
+
+        // Find the calendar cell for this date
+        const dayCell = document.querySelector(`[data-date="${dateKey}"]`);
+
+        if (dayCell) {
+            dayCell.classList.add('has-appointment');
+
+            // Add visual indicator if not exists
+            if (!dayCell.querySelector('.appointment-dot')) {
+                const dot = document.createElement('div');
+                dot.className = 'appointment-dot';
+                dot.style.cssText = 'position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:8px;height:8px;border-radius:50%;background:#6366aa;';
+                dot.title = 'Has appointment';
+                dayCell.appendChild(dot);
+            }
+        }
+        console.log('📍 Marked date:', dateKey);
+    });
+}
+
 function renderCalendar() {
     const calendar = document.getElementById('calendarView');
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'];
-    
+
     if (calendarViewMode === 'month') {
         renderMonthView(calendar, monthNames);
     } else if (calendarViewMode === 'week') {
@@ -14825,6 +14922,10 @@ function renderCalendar() {
     } else if (calendarViewMode === 'day') {
         renderDayView(calendar, monthNames);
     }
+
+    // ADD THESE AT THE END:
+    initializeCalendarClickHandlers();
+    renderAppointmentsOnCalendar();
 }
 
 function renderMonthView(calendar, monthNames) {
