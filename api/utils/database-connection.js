@@ -39,13 +39,14 @@ async function initDatabase() {
         application_name: 'sessionably'
       },
 
-      // Transform column names from snake_case to camelCase
-      transform: {
-        column: {
-          to: postgres.toCamel,
-          from: postgres.fromCamel
-        }
-      },
+      // DISABLED: camelCase transformation was causing mismatch with frontend
+      // Frontend expects snake_case column names (appointment_date, client_id, etc.)
+      // transform: {
+      //   column: {
+      //     to: postgres.toCamel,
+      //     from: postgres.fromCamel
+      //   }
+      // },
 
       // Error handling
       onnotice: () => {}, // Suppress notices in production
