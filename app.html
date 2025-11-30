@@ -12019,14 +12019,17 @@ async function loadClients() {
 // Load appointments from database API
 async function loadAppointments() {
     try {
+        console.log('📅 Loading appointments from API...');
         const response = await fetch('/api/appointments');
         const result = await response.json();
+        console.log('📅 API response:', result);
 
         if (!response.ok) {
             throw new Error(result.error || 'Failed to load appointments');
         }
 
         appointments = result.data || [];
+        console.log('📅 Loaded appointments count:', appointments.length, appointments);
 
         // Render calendar after loading appointments
         if (document.getElementById('calendarView')) {
