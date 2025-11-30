@@ -11811,29 +11811,17 @@ This is an automated invoice. Please contact our office with any questions.
 
 // SMS Appointment Reminder Functions
 async function scheduleAppointmentSMSReminder(appointment) {
-    // ADD THIS VALIDATING BLOCK AT THE START
     // 1. Check appointment object exists
     if (!appointment) {
         console.error('No appointment provided to SMS scheduler');
         return;
     }
 
-    // 2. Get and validate the date
-    let appointmentDateTime;
-    const appointmentDate = appointment.appointmentDate || appointment.appointment_date;
-    const appointmentTime = appointment.appointmentTime || appointment.appointment_time;
+    // 2. Use flexible parser to handle all date formats (including ISO)
+    const appointmentDateTime = parseAppointmentDate(appointment);
 
-    if (appointment.dateTime) {
-        appointmentDateTime = new Date(appointment.dateTime);
-    } else if (appointmentDate && appointmentTime) {
-        appointmentDateTime = new Date(`${appointmentDate}T${appointmentTime}`);
-    } else {
-        console.error('Appointment missing date/time:', appointment);
-        return;
-    }
-
-    // 3. Validate date is valid before using
-    if (isNaN(appointmentDateTime.getTime())) {
+    // 3. Validate date was parsed successfully
+    if (!appointmentDateTime) {
         console.error('Invalid appointment date -', appointment);
         return; // Exit early - don't try to schedule
     }
@@ -14867,17 +14855,16 @@ function renderMonthView(calendar, monthNames) {
         
         const dateString = currentDate.toISOString().split('T')[0];
         const dayAppointments = appointments.filter(apt => {
-            // Validate date before accessing
-            const aptDateValue = apt.appointment_date || apt.date;
-            if (!aptDateValue) {
-                return false; // Skip appointments with no date
+            // Use flexible parser to handle all date formats (including ISO)
+            const aptDate = parseAppointmentDate(apt);
+            if (!aptDate) {
+                return false; // Skip invalid - already warned by parser
             }
-            const aptDate = new Date(aptDateValue);
-            if (isNaN(aptDate.getTime())) {
-                return false; // Skip this appointment - invalid date
-            }
-            // Safe to access - date is valid
-            const aptDateStr = aptDateValue.split('T')[0];
+            // Get date string for calendar lookup (YYYY-MM-DD)
+            const year = aptDate.getFullYear();
+            const month = String(aptDate.getMonth() + 1).padStart(2, '0');
+            const day = String(aptDate.getDate()).padStart(2, '0');
+            const aptDateStr = `${year}-${month}-${day}`;
             return aptDateStr === dateString;
         });
         
@@ -14886,7 +14873,7 @@ function renderMonthView(calendar, monthNames) {
         if (isToday) classes += ' today';
         if (dayAppointments.length > 0) classes += ' has-appointment';
         
-        html += `<div class="${classes}" onclick="showDayAppointments('${dateString}')" draggable="true" ondragstart="dragStart(event, '${dateString}')" ondragover="dragOver(event)" ondrop="drop(event, '${dateString}')">
+        html += `<div class="${classes}" data-date="${dateString}" onclick="showDayAppointments('${dateString}')" draggable="true" ondragstart="dragStart(event, '${dateString}')" ondragover="dragOver(event)" ondrop="drop(event, '${dateString}')">
                     <div class="day-number">${currentDate.getDate()}</div>
                     ${dayAppointments.length > 0 ? `
                         <div class="appointment-widgets">
@@ -14991,13 +14978,15 @@ function renderWeekView(calendar, monthNames) {
         hours.forEach(hour => {
             const timeSlot = `${hour.toString().padStart(2, '0')}:00`;
             const slotAppointments = appointments.filter(apt => {
-                // Validate date before accessing
-                const aptDateValue = apt.appointment_date || apt.date;
-                if (!aptDateValue) return false;
-                const aptDateCheck = new Date(aptDateValue);
-                if (isNaN(aptDateCheck.getTime())) return false;
-                const aptDate = aptDateValue.split('T')[0];
-                return aptDate === dateString && apt.time === timeSlot;
+                // Use flexible parser to handle all date formats (including ISO)
+                const aptDate = parseAppointmentDate(apt);
+                if (!aptDate) return false;
+                // Get date string for calendar lookup (YYYY-MM-DD)
+                const year = aptDate.getFullYear();
+                const month = String(aptDate.getMonth() + 1).padStart(2, '0');
+                const day = String(aptDate.getDate()).padStart(2, '0');
+                const aptDateStr = `${year}-${month}-${day}`;
+                return aptDateStr === dateString && apt.time === timeSlot;
             });
             
             let classes = 'time-slot';
@@ -15024,14 +15013,16 @@ function renderDayView(calendar, monthNames) {
         `${monthNames[currentCalendarDate.getMonth()]} ${currentCalendarDate.getDate()}, ${currentCalendarDate.getFullYear()}`;
 
     const dayAppointments = appointments.filter(apt => {
-        // Validate date before accessing
-        const aptDateValue = apt.appointment_date || apt.date;
-        if (!aptDateValue) return false;
-        const aptDateCheck = new Date(aptDateValue);
-        if (isNaN(aptDateCheck.getTime())) return false;
-        const aptDate = aptDateValue.split('T')[0];
-        return aptDate === dateString;
-    }).sort((a, b) => a.time.localeCompare(b.time));
+        // Use flexible parser to handle all date formats (including ISO)
+        const aptDate = parseAppointmentDate(apt);
+        if (!aptDate) return false;
+        // Get date string for calendar lookup (YYYY-MM-DD)
+        const year = aptDate.getFullYear();
+        const month = String(aptDate.getMonth() + 1).padStart(2, '0');
+        const day = String(aptDate.getDate()).padStart(2, '0');
+        const aptDateStr = `${year}-${month}-${day}`;
+        return aptDateStr === dateString;
+    }).sort((a, b) => (a.appointment_time || a.time || '').localeCompare(b.appointment_time || b.time || ''));
     
     let html = '<div class="day-view">';
     html += '<div class="day-appointments">';
@@ -16217,6 +16208,39 @@ function openNewAppointment() {
     // Set default date to today
     document.getElementById('appointmentDate').value = new Date().toISOString().split('T')[0];
     document.getElementById('newAppointmentModal').style.display = 'block';
+}
+
+// FLEXIBLE DATE PARSER - Handles multiple date formats including ISO
+function parseAppointmentDate(appointment) {
+    // Handle multiple date formats
+    let dateValue = appointment.appointment_date ||
+                    appointment.appointmentDate ||
+                    appointment.date ||
+                    appointment.dateTime;
+
+    if (!dateValue) {
+        console.warn('No date field found:', appointment);
+        return null;
+    }
+
+    // Parse the date - works with both formats:
+    // '2025-11-30' AND '2025-11-30T00:00:00.000Z'
+    let parsedDate = new Date(dateValue);
+
+    // Check if valid
+    if (isNaN(parsedDate.getTime())) {
+        console.warn('Could not parse date:', dateValue);
+        return null;
+    }
+
+    // Combine with time if separate
+    if (appointment.appointment_time || appointment.appointmentTime || appointment.time) {
+        const timeStr = appointment.appointment_time || appointment.appointmentTime || appointment.time;
+        const [hours, minutes] = timeStr.split(':');
+        parsedDate.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+    }
+
+    return parsedDate;
 }
 
 // FIXED CODE - Add this date validation function
