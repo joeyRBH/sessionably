@@ -1122,51 +1122,6 @@
         }
 
         /* Enhanced Calendar Styling */
-        .calendar-container {
-            background: var(--surface-color);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            box-shadow: var(--shadow-light);
-            border: 1px solid var(--border-color);
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background: var(--border-color);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .calendar-day {
-            background: var(--surface-color);
-            padding: 12px 8px;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-primary);
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .calendar-day.other-month {
-            color: var(--text-secondary);
-            background: #f8f9fa;
-        }
-
-        .calendar-day.today {
-            background: var(--primary-color);
-            color: white;
-            font-weight: 600;
-        }
-
-        .calendar-day.has-appointment {
-            background: rgba(37, 99, 235, 0.1);
-            border: 2px solid var(--primary-color);
-        }
 
         /* Enhanced Appointments List */
         .appointments-list {
@@ -2309,6 +2264,8 @@
             margin-bottom: 4px;
             text-align: right;
             padding-right: 4px;
+            flex-shrink: 0;
+            flex-basis: auto;
         }
 
         /* Google Calendar-style Appointment Widgets */
@@ -2317,7 +2274,8 @@
             flex-direction: column;
             gap: 2px;
             overflow-y: auto;
-            flex: 1;
+            flex: 1 1 0;
+            min-height: 0;
         }
 
         .appointment-widget {
@@ -2356,132 +2314,6 @@
             filter: brightness(1.1);
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             transform: translateY(-1px);
-        }
-        
-        .widget-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .widget-main-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .widget-client-name {
-            color: #333;
-            font-weight: 500;
-            font-size: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.2;
-        }
-
-        .widget-modality-indicator {
-            display: flex;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .modality-icon {
-            font-size: 11px;
-            line-height: 1;
-            opacity: 0.8;
-        }
-
-        .telehealth-icon {
-            filter: grayscale(0%);
-        }
-
-        .in-person-icon {
-            filter: grayscale(0%);
-        }
-        
-        .widget-expanded {
-            margin-top: 4px;
-            border-top: 1px solid #e9ecef;
-            padding-top: 4px;
-        }
-        
-        .expanded-info {
-            font-size: 9px;
-            color: #000000;
-            line-height: 1.2;
-        }
-        
-        .client-name {
-            font-weight: bold;
-            margin-bottom: 2px;
-        }
-        
-        .appointment-type {
-            color: #666;
-            margin-bottom: 1px;
-        }
-        
-        .appointment-duration {
-            color: #666;
-            margin-bottom: 1px;
-        }
-
-        .appointment-modality {
-            color: #666;
-            margin-bottom: 1px;
-            font-style: italic;
-        }
-        
-        .appointment-notes {
-            color: #888;
-            font-style: italic;
-            margin-top: 2px;
-            max-height: 20px;
-            overflow: hidden;
-        }
-        
-        .widget-actions {
-            display: flex;
-            gap: 2px;
-            margin-top: 4px;
-        }
-        
-        .btn-widget-edit, .btn-widget-delete {
-            padding: 1px 4px;
-            font-size: 8px;
-            border: none;
-            border-radius: 2px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .btn-widget-edit {
-            background: #e3f2fd;
-            color: #1976d2;
-        }
-        
-        .btn-widget-edit:hover {
-            background: #bbdefb;
-        }
-        
-        .btn-widget-delete {
-            background: #ffebee;
-            color: #d32f2f;
-        }
-        
-        .btn-widget-delete:hover {
-            background: #ffcdd2;
-        }
-        
-        .widget-time {
-            color: #666;
-            font-weight: 600;
-            font-size: 9px;
-            line-height: 1.2;
         }
         
         .widget-initials {
@@ -16469,6 +16301,10 @@ async function saveAppointment() {
         }
 
         await logAudit('create_appointment', { id: result.data.id, client_id: appointmentData.client_id });
+
+        // ADD the new appointment to the local array immediately
+        appointments.push(result.data);
+        console.log('✅ Added appointment to local array. Total appointments:', appointments.length);
 
         // Schedule SMS reminder - validate date before calling
         const appointmentDateTime = parseAppointmentDateTime(
