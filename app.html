@@ -16344,10 +16344,12 @@ async function saveAppointment() {
         document.getElementById('appointmentNotes').value = '';
         document.getElementById('appointmentStatus').value = 'scheduled';
 
-        // Reload appointments
-        await loadAppointments();
+        // ✅ FIX: Comment out loadAppointments() - we already have it!
+        // await loadAppointments();  // DON'T reload - we already pushed it to the array!
+
+        // Just re-render with current data
         renderCalendar();
-        renderAppointmentsList();
+        renderAppointmentsList();  // This will now see the appointment!
 
     } catch (error) {
         console.error('❌ Error saving appointment:', error);
