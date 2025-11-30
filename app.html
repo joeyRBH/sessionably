@@ -14865,10 +14865,10 @@ function initializeCalendarClickHandlers() {
 
 // ADD THIS: Render appointments on calendar
 function renderAppointmentsOnCalendar() {
-    // Get appointments from state/storage
-    const storedAppts = JSON.parse(localStorage.getItem('appointments') || '[]');
+    // Get appointments from global state (loaded from API)
+    const appts = appointments || [];
 
-    console.log('📅 Rendering appointments:', storedAppts.length);
+    console.log('📅 Rendering appointments:', appts.length);
 
     // Clear existing appointment indicators
     document.querySelectorAll('.calendar-day').forEach(el => {
@@ -14878,7 +14878,7 @@ function renderAppointmentsOnCalendar() {
         el.remove();
     });
 
-    storedAppts.forEach(apt => {
+    appts.forEach(apt => {
         // Parse the date - handle multiple formats
         let dateStr = apt.appointment_date || apt.date || apt.datetime;
         if (!dateStr) return;
