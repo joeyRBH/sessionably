@@ -2229,54 +2229,69 @@
             color: white;
             border-color: var(--primary-color);
         }
+        /* Google Calendar-style Container */
         .calendar-container {
             background: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--shadow-light);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.06);
             margin-bottom: 20px;
-            border: 1px solid var(--border-color);
+            border: 1px solid #e0e0e0;
         }
+
+        /* Google Calendar-style Grid */
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 1px;
-            background: #ddd;
+            gap: 0;
+            background: white;
+            border: 1px solid #e0e0e0;
             border-radius: 8px;
             overflow: hidden;
         }
+
+        /* Google Calendar-style Day Cells */
         .calendar-day {
             background: white;
-            padding: 15px 10px;
-            min-height: 80px;
+            padding: 8px;
+            min-height: 120px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: background 0.15s ease;
             position: relative;
-            color: #000000;
+            color: #3c4043;
+            border-right: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
         }
-        .calendar-day:hover,
-        .calendar-day:hover .day-cell:hover {
-            background: #f8f8f8;
-            cursor: pointer;
+
+        .calendar-day:hover {
+            background: #f8f9fa;
         }
-        .calendar-day-hover,
-        .day-cell:hover {
-            background: #f8f8f8;
-        }
-        .has-appointment-dot {
-            background: #6666ff !important;
-        }
+
         .calendar-day.other-month {
-            color: #ccc;
+            color: #9aa0a6;
+            background: #fafafa;
         }
+
         .calendar-day.today {
-            background: var(--background-gradient);
-            font-weight: bold;
-            border: 2px solid var(--primary-color);
+            background: #e8f0fe;
         }
+
+        .calendar-day.today .day-number {
+            background: #1a73e8;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+        }
+
         .calendar-day.has-appointment {
-            background: rgba(16, 185, 129, 0.1);
-            border-left: 4px solid #10b981;
+            background: white;
         }
         .appointment-dot {
             width: 8px;
@@ -2286,56 +2301,61 @@
             margin: 2px auto;
         }
         
+        /* Google Calendar-style Day Number */
+        .day-number {
+            font-size: 12px;
+            font-weight: 500;
+            color: #3c4043;
+            margin-bottom: 4px;
+            text-align: right;
+            padding-right: 4px;
+        }
+
+        /* Google Calendar-style Appointment Widgets */
         .appointment-widgets {
-            position: absolute;
-            top: 25px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
             display: flex;
             flex-direction: column;
             gap: 2px;
-            overflow: hidden;
+            overflow-y: auto;
+            flex: 1;
         }
-        
+
         .appointment-widget {
-            background: #ffffff;
-            border-left: 3px solid #2196f3;
-            border-top: 1px solid #e9ecef;
-            border-right: 1px solid #e9ecef;
-            border-bottom: 1px solid #e9ecef;
+            background: #039be5;
+            border-left: none;
             border-radius: 4px;
-            padding: 3px 5px;
-            font-size: 10px;
+            padding: 4px 6px;
+            font-size: 11px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-            margin-bottom: 2px;
+            transition: all 0.15s ease;
+            color: white;
+            font-weight: 500;
             overflow: hidden;
-            max-height: 28px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
         .appointment-widget.telehealth {
-            border-left-color: #9c27b0;
-            background: #fafafa;
+            background: #8e24aa;
         }
 
         .appointment-widget.in-person {
-            border-left-color: #2196f3;
+            background: #039be5;
         }
-        
-        .appointment-widget.expanded {
-            max-height: 120px;
-            padding: 4px 6px;
-            z-index: 10;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+        .appointment-widget.completed {
+            background: #689f38;
         }
-        
+
+        .appointment-widget.cancelled {
+            background: #e53935;
+        }
+
         .appointment-widget:hover {
-            background: #f8f9fa;
-            border-color: var(--primary-color);
-            transform: scale(1.02);
+            filter: brightness(1.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transform: translateY(-1px);
         }
         
         .widget-content {
@@ -3086,23 +3106,31 @@
             color: #1b5e20;
         }
         
+        /* Google Calendar-style Header */
         .calendar-header {
-            background: #f8f9fa;
-            padding: 10px;
+            background: white;
+            padding: 12px;
             text-align: center;
-            font-weight: bold;
-            color: #666;
-        }
-        .day-number {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #000000;
+            font-weight: 500;
+            color: #70757a;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border-right: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
         }
         .more-appointments {
-            font-size: 12px;
-            color: #666;
-            text-align: center;
-            margin-top: 2px;
+            font-size: 11px;
+            color: #5f6368;
+            text-align: left;
+            margin-top: 4px;
+            padding: 2px 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .more-appointments:hover {
+            color: #1a73e8;
         }
         
         /* Week View Styles */
@@ -15002,31 +15030,15 @@ function renderMonthView(calendar, monthNames) {
 
                                 const modality = (apt.modality || 'in-person').toLowerCase();
                                 const isTelehealth = modality === 'telehealth';
+                                const status = (apt.status || 'scheduled').toLowerCase();
+                                const statusClass = status === 'completed' ? 'completed' : status === 'cancelled' ? 'cancelled' : (isTelehealth ? 'telehealth' : 'in-person');
 
                                 return `
-                                <div class="appointment-widget ${isTelehealth ? 'telehealth' : 'in-person'}" onclick="event.stopPropagation(); toggleWidgetExpansion('${dateString}', ${apt.id})" data-appointment-id="${apt.id}">
-                                    <div class="widget-content">
-                                        <div class="widget-main-info">
-                                            <div class="widget-time">${displayTime}</div>
-                                            <div class="widget-client-name">${displayName}</div>
-                                        </div>
-                                        <div class="widget-modality-indicator" title="${isTelehealth ? 'Telehealth' : 'In-Person'}">
-                                            ${isTelehealth ? '<span class="modality-icon telehealth-icon">📹</span>' : '<span class="modality-icon in-person-icon">📍</span>'}
-                                        </div>
-                                    </div>
-                                    <div class="widget-expanded" style="display: none;">
-                                        <div class="expanded-info">
-                                            <div class="client-name">${apt.client_name || 'Unknown Client'}</div>
-                                            <div class="appointment-type">${apt.type || 'Consultation'}</div>
-                                            <div class="appointment-duration">${apt.duration || 60} min</div>
-                                            <div class="appointment-modality">Mode: ${isTelehealth ? 'Telehealth' : 'In-Person'}</div>
-                                            ${apt.notes ? `<div class="appointment-notes">${apt.notes}</div>` : ''}
-                                        </div>
-                                        <div class="widget-actions">
-                                            <button onclick="event.stopPropagation(); editAppointment(${apt.id})" class="btn-widget-edit">Edit</button>
-                                            <button onclick="event.stopPropagation(); deleteAppointment(${apt.id})" class="btn-widget-delete">Delete</button>
-                                        </div>
-                                    </div>
+                                <div class="appointment-widget ${statusClass}"
+                                     onclick="event.stopPropagation(); openAppointmentDetail(${apt.id})"
+                                     data-appointment-id="${apt.id}"
+                                     title="${apt.client_name} - ${displayTime}">
+                                    ${displayTime} ${displayName}
                                 </div>
                                 `;
                             }).join('')}
