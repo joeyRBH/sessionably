@@ -16302,6 +16302,10 @@ async function saveAppointment() {
 
         await logAudit('create_appointment', { id: result.data.id, client_id: appointmentData.client_id });
 
+        // ADD the new appointment to the local array immediately
+        appointments.push(result.data);
+        console.log('✅ Added appointment to local array. Total appointments:', appointments.length);
+
         // Schedule SMS reminder - validate date before calling
         const appointmentDateTime = parseAppointmentDateTime(
             appointmentData.appointment_date,
